@@ -34,12 +34,13 @@
 
         /* ヘッダー・フッター */
         .zone {
-            width: 100%; height: 12vh;
+            width: 100%; height: 12vh; cursor: pointer; touch-action: manipulation; user-select: none;
             display: flex; align-items: center; justify-content: center;
             color: white; font-weight: bold; font-size: 1.2rem;
         }
         .top-zone { background-color: var(--bg-blue); border-radius: 0 0 40px 40px; }
         .bottom-zone { background-color: var(--bg-dark); border-radius: 40px 40px 0 0; }
+        .zone small { font-size: .7rem; opacity: .8; margin-left: 10px; letter-spacing: .04em; }
 
         /* スタート画面 / リザルト画面 */
         .overlay {
@@ -103,14 +104,14 @@
 <body>
 
 <div class="game-container">
-    <div class="zone top-zone">3n</div>
+    <div class="zone top-zone" role="button" tabindex="0" aria-label="3の倍数">3n <small>タップ / ↑</small></div>
     <div class="center-area">
         <div class="number-card" id="card">
             <div class="number-display" id="number-text">--</div>
             <div class="timer-line" id="timer-line"></div>
         </div>
     </div>
-    <div class="zone bottom-zone">Not</div>
+    <div class="zone bottom-zone" role="button" tabindex="0" aria-label="3の倍数ではない">Not <small>タップ / ↓</small></div>
 </div>
 
 <div id="start-screen" class="overlay">
@@ -220,6 +221,16 @@
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowUp') handleInput('up');
         if (e.key === 'ArrowDown') handleInput('down');
+    });
+document.querySelector('.top-zone').addEventListener('click', () => handleInput('up'));
+    document.querySelector('.bottom-zone').addEventListener('click', () => handleInput('down'));
+    document.querySelectorAll('.zone').forEach((zone) => {
+        zone.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                zone.click();
+            }
+        });
     });
 </script>
 
