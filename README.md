@@ -4,7 +4,7 @@
 
 ## Live hub
 
-- **Portal:** https://all-site-andy127.vercel.app
+- **Portal:** https://all-site-kappa.vercel.app
 - **Repository:** https://github.com/Andy234-andy/All_site
 - GitHub の `main` ブランチと Vercel を接続し、更新を自動デプロイします。
 
