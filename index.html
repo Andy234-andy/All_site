@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d19">
+<meta name="description" content="Andyが作ったゲーム、Webアプリ、実験プロジェクトをひとつにまとめた作品ポータル。">
+<title>ANDY'S WORLD — 作品ポータル</title>
+<style>
+:root{color-scheme:dark;--bg:#080c17;--panel:#111a2b;--panel2:#17233a;--line:#273653;--text:#eef3ff;--muted:#9aabc7;--cyan:#61e7dd;--violet:#a993ff;--pink:#ff8fbd;--gold:#ffd579;--green:#a7edbd}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 12% -8%,#293a7655,transparent 38%),radial-gradient(ellipse at 93% 15%,#155b5a30,transparent 30%),var(--bg);color:var(--text);font-family:Inter,"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif}
+a{color:inherit}
+button,input{font:inherit}
+button{cursor:pointer}
+.wrap{width:min(1160px,calc(100% - 36px));margin:auto}
+header{padding:24px 0 16px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:900;letter-spacing:.16em}
+.brand-icon{width:39px;height:39px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),var(--violet));color:#07111d;font-size:21px;box-shadow:0 8px 26px #61e7dd25}
+.header-note{font-size:11px;color:var(--muted);letter-spacing:.08em}
+.hero{position:relative;overflow:hidden;border:1px solid #334466;border-radius:28px;padding:clamp(28px,5vw,58px);background:linear-gradient(115deg,#1a2c4d 0%,#17213a 54%,#282044 100%);box-shadow:0 28px 90px #0005}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero:before{width:330px;height:330px;right:-100px;top:-170px;background:#61e7dd16}
+.hero:after{width:240px;height:240px;right:130px;bottom:-200px;background:#a993ff1c}
+.hero-content{position:relative;z-index:1;max-width:730px}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:.23em;color:var(--cyan)}
+h1{font-size:clamp(36px,7vw,72px);letter-spacing:-.065em;line-height:1.06;margin:15px 0 16px}
+h1 span{color:transparent;background:linear-gradient(90deg,#fff,#a9f5ed 50%,#c8b9ff);background-clip:text;-webkit-background-clip:text}
+.hero p{max-width:620px;color:#c6d1e5;font-size:14px;line-height:1.9;margin:0}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.stat{min-width:112px;padding:12px 15px;border:1px solid #ffffff20;border-radius:15px;background:#ffffff0a}
+.stat strong{display:block;font-size:22px;line-height:1.2}
+.stat small{font-size:10px;color:#b2c0d6}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:36px 0 15px}
+.section-head h2{margin:0;font-size:19px;letter-spacing:-.03em}
+.section-head p{margin:5px 0 0;color:var(--muted);font-size:11px}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 17px}
+.search{flex:1 1 220px;position:relative}
+.search input{width:100%;border:1px solid var(--line);background:#0d1525;color:var(--text);padding:13px 15px 13px 42px;border-radius:13px;outline:none}
+.search input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #61e7dd18}
+.search:before{content:"⌕";position:absolute;left:15px;top:5px;font-size:25px;color:var(--muted)}
+.filters{display:flex;gap:7px;flex-wrap:wrap}
+.filter{border:1px solid var(--line);border-radius:999px;background:#10192a;color:var(--muted);padding:10px 14px;font-size:11px;font-weight:800}
+.filter.active{color:#09121b;background:var(--cyan);border-color:var(--cyan)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{min-width:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,#151f33,#101827);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-4px);border-color:#56708d;box-shadow:0 18px 44px #0004}
+.cover{height:142px;display:grid;place-items:center;position:relative;overflow:hidden;background:linear-gradient(140deg,#183c4c,#202546)}
+.cover:before{content:"";position:absolute;width:210px;height:210px;border:1px solid #ffffff18;border-radius:50%;right:-65px;top:-110px;box-shadow:0 0 0 24px #ffffff06,0 0 0 50px #ffffff04}
+.cover .emoji{position:relative;z-index:1;font-size:54px;filter:drop-shadow(0 12px 10px #0005)}
+.cover.game{background:linear-gradient(140deg,#3a264c,#1a3451)}
+.cover.tool{background:linear-gradient(140deg,#13464b,#1c3155)}
+.cover.archive{background:linear-gradient(140deg,#3a3447,#20283c)}
+.cover.lab{background:linear-gradient(140deg,#443c29,#213349)}
+.card-body{padding:17px;display:flex;flex-direction:column;flex:1}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.kind{font-size:9px;font-weight:900;letter-spacing:.12em;color:var(--cyan);text-transform:uppercase}
+.status{font-size:9px;border:1px solid #ffffff20;color:#c2cde0;border-radius:999px;padding:5px 8px;white-space:nowrap}
+.status.live{color:var(--green);border-color:#a7edbd48;background:#a7edbd0d}
+.status.archive{color:#e5c7ff;border-color:#caa6ff45;background:#caa6ff0d}
+.status.repair{color:var(--gold);border-color:#ffd57950;background:#ffd5790c}
+.card h3{font-size:17px;line-height:1.35;margin:0 0 8px;letter-spacing:-.025em}
+.card p{color:var(--muted);font-size:11px;line-height:1.75;margin:0 0 15px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;margin-bottom:14px}
+.tag{font-size:9px;padding:5px 8px;border:1px solid #ffffff16;border-radius:7px;color:#aebed6;background:#ffffff05}
+.actions{display:flex;gap:8px}
+.action{flex:1;text-align:center;text-decoration:none;border:1px solid #405572;background:#1c2a41;color:#eaf5ff;border-radius:10px;padding:10px 9px;font-size:10px;font-weight:900;transition:.15s}
+.action.primary{background:linear-gradient(100deg,var(--cyan),#94c9ff);border:0;color:#08131e}
+.action:hover{filter:brightness(1.12)}
+.action.disabled{opacity:.65}
+.empty{grid-column:1/-1;text-align:center;padding:48px 20px;border:1px dashed var(--line);border-radius:18px;color:var(--muted);font-size:13px}
+.notice{margin-top:28px;padding:16px 18px;border:1px solid #665735;border-radius:15px;background:#ffd5790b;color:#d9ccad;font-size:11px;line-height:1.8}
+footer{padding:32px 0 42px;color:#7789a7;font-size:10px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+footer a{color:#a9c9dc;text-decoration:none}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.wrap{width:min(100% - 24px,560px)}header{padding-top:16px}.header-note{display:none}.hero{border-radius:21px}.grid{grid-template-columns:1fr}.cover{height:120px}.section-head{align-items:start;flex-direction:column}.controls{align-items:stretch}.filters{display:grid;grid-template-columns:repeat(4,1fr)}.filter{padding:9px 5px;font-size:10px}.stat{min-width:0;flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="brand-icon">A</div><div>ANDY'S WORLD<br><span style="font-size:9px;color:#8294b2;font-weight:600;letter-spacing:.2em">PROJECT COLLECTION</span></div></div>
+  <div class="header-note">GAMES · WEB APPS · EXPERIMENTS</div>
+</header>
+<main>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="eyebrow">MY DIGITAL PLAYGROUND</div>
+      <h1>つくったものを、<br><span>ひとつの場所に。</span></h1>
+      <p>ゲームも、Webアプリも、実験も。これまで作ってきた作品をまとめたポータル。気になる作品を開いて、遊んだり、試したりしてみてな！</p>
+      <div class="stats">
+        <div class="stat"><strong id="totalCount">0</strong><small>掲載作品</small></div>
+        <div class="stat"><strong id="gameCount">0</strong><small>ゲーム・遊べる作品</small></div>
+        <div class="stat"><strong id="toolCount">0</strong><small>Webツール</small></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <div><h2>作品ライブラリ</h2><p>検索・カテゴリで絞り込めるで。</p></div>
+    <p id="resultCount"></p>
+  </div>
+  <div class="controls">
+    <div class="search"><input id="searchInput" type="search" placeholder="作品名・キーワードで検索..." aria-label="作品を検索"></div>
+    <div class="filters" aria-label="カテゴリ">
+      <button class="filter active" data-filter="all">すべて</button>
+      <button class="filter" data-filter="game">ゲーム</button>
+      <button class="filter" data-filter="tool">ツール</button>
+      <button class="filter" data-filter="archive">旧作・実験</button>
+    </div>
+  </div>
+  <section class="grid" id="projectGrid" aria-live="polite"></section>
+
+  <div class="notice">
+    <strong>作品について：</strong> Focus Flow AI と FOCUS LAB の表示値は、カメラ等から得られる信号を使った実験的な目安で、集中力や能力を科学的に判定するものではありません。カメラ機能を使う場合は、各アプリ内の説明とブラウザの権限表示を確認してな。
+    <br><br>
+    <strong>復旧メモ：</strong> 旧 ATSUKI ARCADE は公開ページを確認できた一方、ゲーム一覧APIが空の状態やったので「復旧待ち」として掲載。ゲームを新しい場所に追加していくための拠点として、このポータルを使っていくで。
+  </div>
+</main>
+<footer>
+  <span>© Andy · Made with curiosity and code.</span>
+  <span><a href="https://github.com/Andy234-andy/All_site" target="_blank" rel="noopener">GitHub repository</a></span>
+</footer>
+</div>
+<script>
+const projects = [
+  {id:"egg",name:"たくさんの卵の中からハゲを見つける",kind:"game",kindLabel:"BROWSER GAME",status:"live",statusLabel:"公開中",emoji:"🥚",cover:"game",desc:"たくさんの卵の中から目的のキャラクターを探すタイムアタック。コンボとレア図鑑もあるで！",tags:["タイムアタック","さがしもの","コンボ"],url:"https://egg-hage-game.vercel.app",button:"ゲームを開く",primary:true},
+  {id:"fighter",name:"Andy Fighter Arena",kind:"game",kindLabel:"BROWSER GAME",status:"live",statusLabel:"公開中",emoji:"🥊",cover:"game",desc:"オリジナルファイターで戦うブラウザ格闘ゲーム。",tags:["アクション","格闘"],url:"https://atsuki-fighter-arena.vercel.app",button:"アリーナへ",primary:true},
+  {id:"3n",name:"3n Logic",kind:"game",kindLabel:"PLAY IN THIS SITE",status:"live",statusLabel:"このサイトで遊べる",emoji:"➗",cover:"lab",desc:"数字を見て、3の倍数かどうかを瞬時に判定するゲーム。EASY・NORMAL・HARDの3段階。",tags:["数学","反射神経","1〜10,000"],url:"/games/3n-logic.html",button:"今すぐ遊ぶ",primary:true},
+  {id:"arcade",name:"ATSUKI ARCADE",kind:"archive",kindLabel:"LEGACY GAME HUB",status:"repair",statusLabel:"復旧待ち",emoji:"🕹️",cover:"archive",desc:"以前作った自作ゲームのゲームセンター。旧版の公開ページは残っているけど、現在のゲーム一覧APIは空のため復旧対象。",tags:["旧ゲームセンター","旧版"],url:"https://pause-lab.vercel.app",button:"旧版を開く",primary:false},
+  {id:"focus-flow",name:"Focus Flow AI v8.0",kind:"tool",kindLabel:"WEB APP",status:"live",statusLabel:"公開中",emoji:"🌊",cover:"tool",desc:"作業中の視線・顔の動きなどの信号を探究する、実験的なフォーカス分析ツール。",tags:["AI実験","MediaPipe","フォーカス"],url:"https://focus-flow-ai-phi.vercel.app",button:"ツールを開く",primary:true},
+  {id:"focus-lab",name:"FOCUS LAB",kind:"tool",kindLabel:"WEB APP",status:"live",statusLabel:"公開中",emoji:"🎯",cover:"tool",desc:"カメラの視覚サインを使ったライブダッシュボード。セッションの推移や履歴を確認できる。",tags:["カメラ","分析","セッション"],url:"https://focus-lab-github.vercel.app",button:"ツールを開く",primary:true},
+  {id:"hourglass",name:"命の砂時計",kind:"tool",kindLabel:"WEB APP",status:"live",statusLabel:"公開中",emoji:"⌛",cover:"tool",desc:"時間の有限さを見つめ、今日を大切にするきっかけを作るWebアプリ。",tags:["時間","ライフ"],url:"https://inochi-no-sunadokei-andy127.vercel.app",button:"アプリを開く",primary:true},
+  {id:"focus-v7",name:"Focus Flow AI v7.0 — Enterprise Data-Flywheel",kind:"archive",kindLabel:"OLDER VERSION",status:"archive",statusLabel:"旧バージョン",emoji:"🧪",cover:"archive",desc:"Focus Flow AIの以前のデモ。v8.0とは別の旧版として記録。",tags:["Focus Flow AI","v7.0","アーカイブ"],url:"https://contribute-data-try-v70-demo-1.vercel.app",button:"旧版を開く",primary:false},
+  {id:"eraser",name:"3D Eraser Bounce",kind:"archive",kindLabel:"PYTHON PROJECT",status:"archive",statusLabel:"ソースコード",emoji:"🧽",cover:"lab",desc:"消しゴムの跳ね返りをモデル化し、着地点と最高高度を3D散布図で可視化するPythonシミュレーション。",tags:["Python","3D可視化","物理モデル"],url:"https://github.com/Andy234-andy/3D-Eraser-Bounce",button:"ソースを見る",primary:false}
+];
+const grid=document.getElementById("projectGrid");
+const search=document.getElementById("searchInput");
+const total=document.getElementById("totalCount");
+const gameCount=document.getElementById("gameCount");
+const toolCount=document.getElementById("toolCount");
+const resultCount=document.getElementById("resultCount");
+let activeFilter="all";
+total.textContent=projects.length;
+gameCount.textContent=projects.filter(p=>p.kind==="game").length;
+toolCount.textContent=projects.filter(p=>p.kind==="tool").length;
+function render(){
+  const q=search.value.trim().toLowerCase();
+  const visible=projects.filter(p=>{
+    const inCategory=activeFilter==="all"||p.kind===activeFilter;
+    const text=[p.name,p.desc,p.kindLabel,p.statusLabel,...p.tags].join(" ").toLowerCase();
+    return inCategory&&text.includes(q);
+  });
+  resultCount.textContent=visible.length+" / "+projects.length+" 作品";
+  if(!visible.length){grid.innerHTML='<div class="empty">該当する作品が見つからへんかった。別のキーワードを試してみてな。</div>';return;}
+  grid.innerHTML=visible.map(p=>'<article class="card"><div class="cover '+p.cover+'"><div class="emoji">'+p.emoji+'</div></div><div class="card-body"><div class="card-top"><span class="kind">'+p.kindLabel+'</span><span class="status '+p.status+'">'+p.statusLabel+'</span></div><h3>'+p.name+'</h3><p>'+p.desc+'</p><div class="tags">'+p.tags.map(t=>'<span class="tag">'+t+'</span>').join("")+'</div><div class="actions"><a class="action '+(p.primary?'primary':'')+'" href="'+p.url+'" '+(p.url.startsWith("http")?'target="_blank" rel="noopener"':'')+'>'+p.button+'</a></div></div></article>').join("");
+}
+document.querySelectorAll(".filter").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");activeFilter=btn.dataset.filter;render();
+}));
+search.addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
