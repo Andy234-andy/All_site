@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3n Logic - Difficulty Select</title>
+    <style>
+        :root {
+            --bg-blue: #3b7bb2;
+            --bg-dark: #5b677a;
+            --card-bg: #e6e6e6;
+            --inner-card: #f0f0f0;
+            --grid-color: rgba(0, 0, 0, 0.05);
+            --chip-3n: #5b8db8;
+            --chip-not: #a0a0a0;
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            background-color: #f5f5f5;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            overflow: hidden; user-select: none;
+        }
+
+        /* 共通の背景 */
+        .game-container {
+            position: relative; width: 100vw; height: 100vh;
+            background-image: linear-gradient(var(--grid-color) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+        }
+
+        /* ヘッダー・フッター */
+        .zone {
+            width: 100%; height: 12vh;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 1.2rem;
+        }
+        .top-zone { background-color: var(--bg-blue); border-radius: 0 0 40px 40px; }
+        .bottom-zone { background-color: var(--bg-dark); border-radius: 40px 40px 0 0; }
+
+        /* スタート画面 / リザルト画面 */
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.05);
+            display: flex; justify-content: center; align-items: center; z-index: 100;
+        }
+
+        .menu-card {
+            width: 340px; background: #e0e0e0; border-radius: 30px;
+            padding: 30px 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .title { font-size: 1.5rem; color: #555; margin-bottom: 20px; font-weight: bold; }
+
+        .btn {
+            display: block; width: 80%; margin: 10px auto; padding: 15px;
+            border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-easy { background: #81c784; color: white; }
+        .btn-normal { background: #64b5f6; color: white; }
+        .btn-hard { background: #e57373; color: white; }
+        .btn-retry { background: #a0a0a0; color: white; margin-top: 20px; }
+
+        /* ゲームメイン */
+        .center-area {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 320px; height: 420px;
+            background-color: var(--card-bg); border-radius: 40px;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .number-card {
+            width: 260px; height: 180px;
+            background-color: var(--inner-card); border-radius: 30px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .number-display { font-size: 4rem; font-weight: 500; color: #333; }
+        .timer-line { width: 120px; height: 3px; background-color: #333; margin-top: 10px; transform-origin: center; }
+
+        .swipe-up { transform: translateY(-400px) rotate(-10deg); opacity: 0; }
+        .swipe-down { transform: translateY(400px) rotate(10deg); opacity: 0; }
+
+        /* リザルト詳細 */
+        .score-val { font-size: 5rem; color: #333; line-height: 1; }
+        .history-area {
+            height: 200px; background: #f0f0f0; margin: 15px 0; border-radius: 20px;
+            padding: 15px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 8px;
+        }
+        .chip { padding: 6px 12px; border-radius: 10px; color: white; font-size: 0.8rem; flex-grow: 1; text-align: center; }
+        .chip.is-3n { background-color: var(--chip-3n); }
+        .chip.is-not { background-color: var(--chip-not); }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div class="zone top-zone">3n</div>
+    <div class="center-area">
+        <div class="number-card" id="card">
+            <div class="number-display" id="number-text">--</div>
+            <div class="timer-line" id="timer-line"></div>
+        </div>
+    </div>
+    <div class="zone bottom-zone">Not</div>
+</div>
+
+<div id="start-screen" class="overlay">
+    <div class="menu-card">
+        <div class="title">SELECT DIFFICULTY</div>
+        <button class="btn btn-easy" onclick="initGame(100)">EASY (1-100)</button>
+        <button class="btn btn-normal" onclick="initGame(1000)">NORMAL (1-1000)</button>
+        <button class="btn btn-hard" onclick="initGame(10000)">HARD (1-10000)</button>
+    </div>
+</div>
+
+<div id="result-screen" class="overlay" style="display:none;">
+    <div class="menu-card" style="height: 520px; display: flex; flex-direction: column;">
+        <div style="color:#777;">SCORE</div>
+        <div class="score-val" id="res-score">0</div>
+        <div style="font-size: 0.9rem; color:#999;">BEST: <span id="res-best">0</span></div>
+        <div class="history-area" id="history-area"></div>
+        <button class="btn btn-retry" onclick="showStartScreen()">BACK TO MENU</button>
+    </div>
+</div>
+
+<script>
+    const card = document.getElementById('card');
+    const numberText = document.getElementById('number-text');
+    const timerLine = document.getElementById('timer-line');
+    const startScreen = document.getElementById('start-screen');
+    const resultScreen = document.getElementById('result-screen');
+    
+    let score = 0;
+    let history = [];
+    let timerId = null;
+    let bestScore = 0;
+    let maxRange = 100;
+
+    function showStartScreen() {
+        resultScreen.style.display = 'none';
+        startScreen.style.display = 'flex';
+    }
+
+    function initGame(range) {
+        maxRange = range;
+        score = 0;
+        history = [];
+        startScreen.style.display = 'none';
+        resultScreen.style.display = 'none';
+        nextQuestion();
+    }
+
+    function nextQuestion() {
+        card.style.transition = 'none';
+        card.classList.remove('swipe-up', 'swipe-down');
+        
+        // 難易度に応じたランダム数値
+        const nextNum = Math.floor(Math.random() * maxRange) + 1;
+        numberText.textContent = nextNum;
+
+        timerLine.style.transition = 'none';
+        timerLine.style.transform = 'scaleX(1)';
+
+        setTimeout(() => {
+            card.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+            // 難易度に関わらず制限時間は2.5秒（お好みで調整可）
+            timerLine.style.transition = 'transform 2.5s linear';
+            timerLine.style.transform = 'scaleX(0)';
+            
+            clearTimeout(timerId);
+            timerId = setTimeout(showResult, 2500);
+        }, 50);
+    }
+
+    function handleInput(choice) {
+        if (startScreen.style.display === 'flex' || resultScreen.style.display === 'flex') return;
+
+        const num = parseInt(numberText.textContent);
+        const is3n = num % 3 === 0;
+        const isCorrect = (choice === 'up' && is3n) || (choice === 'down' && !is3n);
+
+        if (isCorrect) {
+            score++;
+            history.push({val: num, type: is3n ? 'is-3n' : 'is-not'});
+            card.classList.add(choice === 'up' ? 'swipe-up' : 'swipe-down');
+            setTimeout(nextQuestion, 300);
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        clearTimeout(timerId);
+        if (score > bestScore) bestScore = score;
+        
+        document.getElementById('res-score').textContent = score;
+        document.getElementById('res-best').textContent = bestScore;
+        
+        const area = document.getElementById('history-area');
+        area.innerHTML = '';
+        history.forEach(item => {
+            const chip = document.createElement('div');
+            chip.className = `chip ${item.type}`;
+            chip.textContent = item.val;
+            area.appendChild(chip);
+        });
+
+        resultScreen.style.display = 'flex';
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp') handleInput('up');
+        if (e.key === 'ArrowDown') handleInput('down');
+    });
+</script>
+
+</body>
+</html>
