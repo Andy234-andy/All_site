@@ -1,0 +1,1344 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9408HRXC1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-V9408HRXC1');
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="dark">
+  <title>Focus Flow AI v8.0 — Signal Lab</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #020617; --panel: #0f172a; --panel2: #111c31;
+      --line: #263449; --text: #e2e8f0; --muted: #94a3b8;
+      --teal: #5eead4; --green: #86efac; --amber: #fcd34d;
+      --red: #fda4af; --blue: #7dd3fc;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+      font: 15px/1.55 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .45; }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--teal); outline-offset: 3px;
+    }
+    .topbar { position: sticky; top: 0; z-index: 10; background: rgba(2,6,23,.93); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .topbar-inner, main, footer { width: min(1240px, 100%); margin: 0 auto; }
+    .topbar-inner { padding: 14px 20px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+    .brand { display: flex; gap: 12px; align-items: center; }
+    .brand-mark { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; background: linear-gradient(135deg,#0f766e,#0891b2); font-size: 23px; font-weight: 900; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 0; font-size: 21px; line-height: 1.2; }
+    h2 { font-size: 16px; margin-bottom: 12px; }
+    h3 { font-size: 14px; margin-bottom: 8px; }
+    .subtitle, .muted, small { color: var(--muted); }
+    .subtitle { font-size: 12px; margin: 4px 0 0; }
+    main { padding: 22px 20px 30px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.03fr) minmax(0, .97fr); gap: 18px; align-items: start; }
+    .stack { display: grid; gap: 18px; min-width: 0; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 17px; padding: 18px; min-width: 0; box-shadow: 0 10px 35px rgba(0,0,0,.12); }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .card-head h2 { margin: 0; }
+    .pill { display: inline-flex; gap: 7px; align-items: center; padding: 4px 9px; border: 1px solid var(--line); background: #020617; color: var(--muted); border-radius: 999px; font-size: 11px; }
+    .dot { width: 8px; height: 8px; background: #64748b; border-radius: 50%; display: inline-block; }
+    .dot.on { background: var(--green); box-shadow: 0 0 0 3px rgba(134,239,172,.1); }
+    .button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 40px; padding: 9px 13px; border: 1px solid #3b4b60; border-radius: 10px; color: var(--text); background: #111c31; transition: background .15s, border-color .15s; }
+    .button:hover:not(:disabled) { background: #1e293b; border-color: #64748b; }
+    .button.primary { background: #0f766e; border-color: #0d9488; color: #ecfeff; font-weight: 700; }
+    .button.primary:hover:not(:disabled) { background: #115e59; }
+    .button.danger { background: #7f1d1d; border-color: #991b1b; }
+    .button.small { min-height: 32px; padding: 5px 9px; font-size: 12px; }
+    .full { width: 100%; }
+    .field { display: grid; gap: 6px; min-width: 0; }
+    .field label, .field-label { font-size: 12px; color: #cbd5e1; font-weight: 650; }
+    .control { width: 100%; min-width: 0; background: #020617; border: 1px solid #334155; color: var(--text); border-radius: 9px; padding: 9px 10px; }
+    .check-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: #cbd5e1; }
+    input[type="checkbox"] { accent-color: #2dd4bf; width: 17px; height: 17px; flex: 0 0 auto; margin-top: 2px; }
+    .notice { background: #102a2a; border: 1px solid #115e59; padding: 12px; border-radius: 11px; color: #ccfbf1; font-size: 12px; }
+    .notice.warning { background: #2b2110; border-color: #854d0e; color: #fde68a; }
+    .notice.error { background: #2c151b; border-color: #881337; color: #fecdd3; }
+    .privacy-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 13px 0; }
+    .privacy-item { background: #020617; border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+    .privacy-item b { display: block; font-size: 12px; margin-bottom: 3px; }
+    .privacy-item span { display: block; font-size: 11px; color: var(--muted); }
+    .mode-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+    .mode-button { min-height: 54px; padding: 8px 6px; font-size: 12px; }
+    .mode-button[aria-pressed="true"] { border-color: var(--teal); color: #ccfbf1; background: #103337; }
+    .camera-stage { position: relative; isolation: isolate; aspect-ratio: 16 / 9; background: #020617; border: 1px solid #293548; overflow: hidden; border-radius: 12px; display: grid; place-items: center; }
+    #videoElement, #overlayCanvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    #videoElement { transform: scaleX(-1); }
+    #overlayCanvas { transform: scaleX(-1); pointer-events: none; }
+    .camera-placeholder { padding: 18px; text-align: center; max-width: 340px; z-index: 1; }
+    .camera-symbol { font-size: 34px; line-height: 1; color: var(--teal); margin-bottom: 12px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; margin-top: 10px; }
+    .metric { background: #020617; border: 1px solid var(--line); border-radius: 10px; min-width: 0; padding: 10px; }
+    .metric-label { font-size: 11px; color: var(--muted); }
+    .metric-value { font-family: ui-monospace,SFMono-Regular,Menlo,monospace; font-size: 15px; font-weight: 750; margin-top: 5px; overflow-wrap: anywhere; }
+    .divider { border: 0; border-top: 1px solid var(--line); margin: 15px 0; }
+    .score-row { display: flex; justify-content: space-between; gap: 15px; align-items: center; }
+    .score-number { font: 800 clamp(45px, 7vw, 65px)/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing: -3px; color: var(--teal); }
+    .score-number .out-of { font-size: 22px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+    .score-ring { width: 108px; height: 108px; flex: 0 0 auto; }
+    .bar { height: 8px; background: #020617; border: 1px solid #273449; border-radius: 99px; overflow: hidden; }
+    .bar-fill { height: 100%; width: 0; background: linear-gradient(90deg,#0e7490,#2dd4bf); transition: width .2s ease; }
+    .bar-fill.quality { background: linear-gradient(90deg,#0369a1,#7dd3fc); }
+    .meta-line { display: flex; justify-content: space-between; gap: 10px; align-items: center; color: var(--muted); font-size: 12px; }
+    .chart-wrap { position: relative; height: 235px; width: 100%; }
+    #historyCanvas { width: 100%; height: 100%; display: block; }
+    .stat-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+    .stat-box { padding: 10px; background: #020617; border: 1px solid var(--line); border-radius: 10px; }
+    .stat-value { font: 700 20px ui-monospace,SFMono-Regular,Menlo,monospace; margin-top: 4px; }
+    .stat-label { font-size: 11px; color: var(--muted); }
+    .timer-face { font: 750 clamp(34px,6vw,48px)/1.1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing: -2px; }
+    .inline-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .small-note { font-size: 11px; color: var(--muted); line-height: 1.5; }
+    details { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+    summary { cursor: pointer; font-size: 12px; color: #cbd5e1; font-weight: 700; }
+    ul.tight { padding-left: 18px; margin: 8px 0 0; }
+    ul.tight li { margin: 6px 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    footer { padding: 18px 20px 26px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; text-align: center; }
+    @media (max-width: 880px) { .layout { grid-template-columns: minmax(0,1fr); } }
+    @media (max-width: 550px) {
+      main { padding: 14px 12px 22px; }
+      .topbar-inner { padding: 12px; }
+      .card { padding: 14px; }
+      .metric-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .privacy-grid { grid-template-columns: minmax(0,1fr); }
+      .score-ring { width: 82px; height: 82px; }
+      .stat-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">◎</div>
+        <div>
+          <h1>Focus Flow AI <span class="muted" style="font-weight:500;font-size:13px">v8.0 Signal Lab</span></h1>
+          <p class="subtitle">Personalized visual study-alignment experiment</p>
+        </div>
+      </div>
+      <div class="inline-row">
+        <span class="pill"><span id="statusDot" class="dot"></span><span id="cameraStatus">Camera off</span></span>
+        <button id="cameraToggle" class="button primary" type="button">Start camera</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="topNotice" class="notice warning" role="status" aria-live="polite" style="margin-bottom:16px">
+      Experimental tool: the score is a rough visual-alignment signal, not a direct measurement of attention, learning, or mental state.
+    </div>
+
+    <div class="layout">
+      <div class="stack">
+        <section class="card" aria-labelledby="privacyTitle">
+          <div class="card-head"><h2 id="privacyTitle">1 · Privacy & camera permission</h2><span class="pill">Site traffic analytics</span></div>
+          <p class="muted" style="font-size:13px;margin-bottom:10px">
+            Camera access is off until you give consent and press Start camera. No microphone is requested.
+          </p>
+          <div class="privacy-grid">
+            <div class="privacy-item"><b>Processed in your browser</b><span>The app's own code does not upload camera frames, face landmarks, activity scores, or self-checks to an app server.</span></div>
+            <div class="privacy-item"><b>Model files come from a CDN</b><span>After you start, pinned MediaPipe scripts and model/WASM assets are downloaded from jsDelivr. The CDN may receive connection metadata.</span></div>
+            <div class="privacy-item"><b>Session data stays local</b><span>Session history and self-checks remain in page memory. Google Analytics and Vercel Web Analytics measure site traffic, including page views and related visit metadata such as referrers, device/browser details, and approximate location. This app does not send camera frames, face landmarks, focus estimates, or self-check ratings to either analytics service.</span></div>
+            <div class="privacy-item"><b>You stay in control</b><span>Stop camera to end capture. Export is manual and creates a CSV file only after you click the export button.</span></div>
+          </div>
+          <label class="check-row" for="privacyConsent">
+            <input id="privacyConsent" type="checkbox">
+            <span>I understand the camera/model behavior described above and agree to start camera processing in this browser.</span>
+          </label>
+          <p id="privacyHint" class="small-note" style="margin:9px 0 0">Start is disabled until the consent box is checked. For stricter network privacy, self-host audited, version-pinned model files instead of using a CDN.</p>
+          <details>
+            <summary>What this privacy statement does — and does not — promise</summary>
+            <ul class="tight muted" style="font-size:12px">
+              <li>The app does not send computed session data to an application backend. Separate Google Analytics and Vercel Web Analytics scripts measure site traffic; this app does not send them camera frames, face landmarks, focus estimates, or self-check ratings.</li>
+              <li>The browser still downloads the third-party MediaPipe libraries and model assets from jsDelivr when camera processing starts. CDN requests can expose typical connection metadata such as IP address and request details.</li>
+              <li>Because a third-party library executes in the page, this is not equivalent to a fully offline or independently audited installation. This page does not claim that all network activity is eliminated.</li>
+              <li>For production use, review and self-host pinned dependencies, serve over HTTPS, and configure security headers at the hosting layer.</li>
+            </ul>
+          </details>
+        </section>
+
+        <section class="card" aria-labelledby="setupTitle">
+          <div class="card-head"><h2 id="setupTitle">2 · Set up your session</h2><span id="modeStatus" class="pill">PC / screen</span></div>
+          <p class="field-label" style="margin-bottom:8px">Study context · calibrate separately for each context</p>
+          <div class="mode-grid" role="group" aria-label="Study context">
+            <button class="button mode-button" data-mode="pc" aria-pressed="true" type="button">▣ PC / screen</button>
+            <button class="button mode-button" data-mode="reading" aria-pressed="false" type="button">▤ Reading</button>
+            <button class="button mode-button" data-mode="notebook" aria-pressed="false" type="button">✎ Notebook</button>
+          </div>
+          <div class="grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px">
+            <div class="field">
+              <label for="sensitivity">Deviation sensitivity</label>
+              <select id="sensitivity" class="control">
+                <option value="relaxed">Relaxed — wider tolerance</option>
+                <option value="balanced" selected>Balanced</option>
+                <option value="strict">Strict — narrower tolerance</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="handsEnabled">Hand-motion proxy</label>
+              <div class="check-row" style="align-items:center;min-height:42px">
+                <input id="handsEnabled" type="checkbox">
+                <span>Optional; does not affect score</span>
+              </div>
+            </div>
+          </div>
+          <p class="small-note" style="margin:12px 0 0">Sensitivity changes how quickly the visual-alignment estimate responds. It cannot make the estimate scientifically accurate. Hand tracking downloads an additional model and is disabled by default.</p>
+        </section>
+
+        <section class="card" aria-labelledby="cameraTitle">
+          <div class="card-head"><h2 id="cameraTitle">3 · Live visual signals</h2><label class="check-row" style="align-items:center" for="showLandmarks"><input id="showLandmarks" type="checkbox" checked><span>Overlay</span></label></div>
+          <div class="camera-stage">
+            <video id="videoElement" class="sr-only" playsinline muted></video>
+            <canvas id="overlayCanvas" aria-hidden="true"></canvas>
+            <div id="cameraPlaceholder" class="camera-placeholder">
+              <div class="camera-symbol" aria-hidden="true">◎</div>
+              <strong>Camera is off</strong>
+              <p class="muted" style="font-size:12px;margin:5px 0 0">Check the privacy note, choose your study mode, then start when ready.</p>
+            </div>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><div class="metric-label">Gaze deviation</div><div class="metric-value" id="gazeValue">—</div></div>
+            <div class="metric"><div class="metric-label">Head-pose deviation</div><div class="metric-value" id="headValue">—</div></div>
+            <div class="metric"><div class="metric-label">Hand movement</div><div class="metric-value" id="handValue">—</div></div>
+            <div class="metric"><div class="metric-label">Hand detection</div><div class="metric-value" id="handState">Off</div></div>
+          </div>
+          <p class="small-note" style="margin:10px 0 0">Gaze/head values are normalized image-space proxies, not physical angles or a clinical eye tracker. Hand motion is normalized screen-space movement, not pen tracking or proof of writing.</p>
+        </section>
+
+        <section class="card" aria-labelledby="calibrationTitle">
+          <div class="card-head"><h2 id="calibrationTitle">4 · Personal baseline</h2><span id="calibrationBadge" class="pill">Not calibrated</span></div>
+          <p class="muted" style="font-size:13px">Look at your usual target and sit naturally. The app collects a short sample and uses medians plus robust spread estimates to reduce the impact of outlier frames.</p>
+          <div class="bar" aria-label="Calibration progress"><div id="calibrationBar" class="bar-fill"></div></div>
+          <div class="meta-line" style="margin-top:7px"><span id="calibrationText">Waiting for camera</span><span id="calibrationPercent">0%</span></div>
+          <button id="recalibrateButton" class="button full" style="margin-top:12px" type="button" disabled>Recalibrate for this mode</button>
+          <p class="small-note" style="margin:10px 0 0">Changing mode restarts calibration. If lighting, camera position, glasses, or your working position changes, recalibrate. The baseline is session-only and is not saved.</p>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="card" aria-labelledby="estimateTitle">
+          <div class="card-head"><h2 id="estimateTitle">Focus estimate · experimental</h2><span id="scoreBadge" class="pill">Awaiting data</span></div>
+          <div class="score-row">
+            <div style="min-width:0">
+              <div class="score-number"><span id="scoreValue">—</span><span class="out-of"> / 100</span></div>
+              <p class="muted" style="font-size:12px;margin:7px 0 0">Relative visual alignment with your calibrated study posture</p>
+            </div>
+            <svg class="score-ring" viewBox="0 0 100 100" role="img" aria-label="Visual alignment indicator">
+              <circle cx="50" cy="50" r="41" fill="none" stroke="#263449" stroke-width="8"></circle>
+              <circle id="scoreRing" cx="50" cy="50" r="41" fill="none" stroke="#5eead4" stroke-width="8" stroke-linecap="round" stroke-dasharray="257.61" stroke-dashoffset="257.61" transform="rotate(-90 50 50)"></circle>
+            </svg>
+          </div>
+          <hr class="divider">
+          <div class="meta-line"><span>Visual input quality · heuristic</span><strong id="qualityValue">Unavailable</strong></div>
+          <div class="bar" style="margin-top:8px"><div id="qualityBar" class="bar-fill quality"></div></div>
+          <p id="scoreExplanation" class="muted" style="font-size:13px;margin:12px 0 0" aria-live="polite">Start the camera to begin. No estimate is available yet.</p>
+          <div id="diagnostics" class="notice" role="status" aria-live="polite" style="margin-top:14px">Camera inactive. No score is being calculated.</div>
+          <p class="small-note" style="margin:12px 0 0">Input quality describes the availability and geometry of the signal. It is not the probability that the score is correct. Low-quality input is marked unavailable rather than turned into a low score.</p>
+        </section>
+
+        <section class="card" aria-labelledby="historyTitle">
+          <div class="card-head"><h2 id="historyTitle">Recent estimate</h2><span class="pill">30-second rolling window</span></div>
+          <div class="chart-wrap"><canvas id="historyCanvas" role="img" aria-label="Visual alignment estimate for the last thirty seconds"></canvas></div>
+          <p class="small-note" style="margin:8px 0 0">One sample per second. Gaps mean the app did not have enough reliable visual input. The line is smoothed to reduce jitter, not to manufacture certainty.</p>
+        </section>
+
+        <section class="card" aria-labelledby="sessionTitle">
+          <div class="card-head"><h2 id="sessionTitle">Session summary & personal self-check</h2><span class="pill">Memory only</span></div>
+          <div class="stat-grid">
+            <div class="stat-box"><div class="stat-label">Session elapsed</div><div id="elapsedStat" class="stat-value">00:00</div></div>
+            <div class="stat-box"><div class="stat-label">Mean valid estimate</div><div id="meanStat" class="stat-value">—</div></div>
+            <div class="stat-box"><div class="stat-label">Usable samples</div><div id="coverageStat" class="stat-value">0%</div></div>
+          </div>
+          <hr class="divider">
+          <p class="muted" style="font-size:13px">Optionally record how focused you feel now. After 8 checks, the app can show an exploratory rank correlation between your self-ratings and the visual estimate. Self-ratings are not ground truth, and correlation does not validate the tool.</p>
+          <div class="grid" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:end">
+            <div class="field"><label for="selfRating">My perceived focus right now</label>
+              <select id="selfRating" class="control">
+                <option value="5">5 — Very focused</option><option value="4">4 — Quite focused</option><option value="3" selected>3 — In between</option><option value="2">2 — Not very focused</option><option value="1">1 — Not focused</option>
+              </select>
+            </div>
+            <button id="logSelfRating" class="button primary" type="button">Log self-check</button>
+          </div>
+          <p id="validationText" class="small-note" style="margin:10px 0 0" aria-live="polite">No self-checks recorded. A valid estimate is required to log one.</p>
+          <hr class="divider">
+          <div class="inline-row">
+            <button id="exportButton" class="button" type="button">Export session CSV</button>
+            <button id="clearButton" class="button danger" type="button">Clear session data</button>
+          </div>
+          <p id="exportStatus" class="small-note" style="margin:9px 0 0">Nothing is saved automatically. Export happens only when you click the button.</p>
+        </section>
+
+        <section class="card" aria-labelledby="timerTitle">
+          <div class="card-head"><h2 id="timerTitle">Study timer</h2><span class="pill">No notifications</span></div>
+          <div class="score-row">
+            <div><div id="timerValue" class="timer-face">25:00</div><div id="timerLabel" class="muted" style="font-size:12px;margin-top:5px">Ready for a study block</div></div>
+            <div class="inline-row"><button id="timerStart" class="button primary" type="button">Start</button><button id="timerReset" class="button" type="button">Reset</button></div>
+          </div>
+          <p class="small-note" style="margin:11px 0 0">The timer is independent of the camera and estimate. When it ends, a visual reminder appears; no sound or browser notification is used.</p>
+        </section>
+
+        <section class="card" aria-labelledby="limitationsTitle">
+          <h2 id="limitationsTitle">What this version can and cannot tell you</h2>
+          <ul class="tight muted" style="font-size:12px">
+            <li><b style="color:#e2e8f0">Can estimate:</b> changes in gaze proxy and head pose relative to your personal baseline, when those signals are visible.</li>
+            <li><b style="color:#e2e8f0">Cannot know:</b> whether you understand the material, are thinking deeply while looking away, or are truly concentrating.</li>
+            <li><b style="color:#e2e8f0">Not used as penalties:</b> missing face data, brief eye closures, and missing hand data. The app reports unavailable input instead.</li>
+            <li><b style="color:#e2e8f0">Not scientifically validated:</b> the weights and tolerances are transparent engineering heuristics, not trained parameters backed by a controlled accuracy study.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Focus Flow AI v8.0 Signal Lab · Experimental personal tool · No built-in analytics or app-server telemetry upload<br>
+    Third-party MediaPipe scripts and model assets load from jsDelivr only after camera startup is requested.
+  </footer>
+
+<script>
+(() => {
+  "use strict";
+
+  // Pinned legacy MediaPipe JS Solutions. They run in the browser but are fetched from a third-party CDN.
+  // For stricter supply-chain/privacy requirements, self-host audited copies of the package and model assets.
+  const FACE_VERSION = "0.4.1633559619";
+  const HAND_VERSION = "0.4.1675469240";
+  const FACE_BASE = `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@${FACE_VERSION}`;
+  const HAND_BASE = `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${HAND_VERSION}`;
+  const FACE_JS = `${FACE_BASE}/face_mesh.js`;
+  const HAND_JS = `${HAND_BASE}/hands.js`;
+  const CALIBRATION_MS = 10000;
+  const MIN_CALIBRATION_SAMPLES = 20;
+  const CALIBRATION_SAMPLE_MS = 180;
+  const SAMPLE_MS = 1000;
+  const WINDOW_MS = 30000;
+  const SCORE_RING_LENGTH = 257.61;
+  const $ = id => document.getElementById(id);
+
+  const state = {
+    mode: "pc",
+    sensitivity: "balanced",
+    active: false,
+    starting: false,
+    generation: 0,
+    stream: null,
+    faceModel: null,
+    handModel: null,
+    rafId: 0,
+    inFlight: null,
+    lastInferenceAt: 0,
+    lastSampleAt: 0,
+    lastValidSampleAt: 0,
+    lastValidFaceAt: 0,
+    lastFaceSeenAt: 0,
+    faceMetrics: null,
+    faceLandmarks: null,
+    handLandmarks: null,
+    currentScore: null,
+    currentQuality: 0,
+    baseline: null,
+    calibrationStartAt: 0,
+    lastCalibrationCandidateAt: 0,
+    calibrationCandidates: [],
+    scoreSmoothing: [],
+    points: [],
+    allSamples: [],
+    selfChecks: [],
+    sessionStartAt: 0,
+    handPoints: [],
+    handSpeed: null,
+    lastHandAt: 0,
+    timerSeconds: 25 * 60,
+    timerRunning: false,
+    timerInterval: null,
+    timerEndAt: 0,
+    timerInitialSeconds: 25 * 60,
+    timerCompleted: false
+  };
+
+  let resizeObserver = null;
+  const video = $("videoElement");
+  const overlay = $("overlayCanvas");
+  const overlayCtx = overlay.getContext("2d");
+  const graph = $("historyCanvas");
+  const graphCtx = graph.getContext("2d");
+  const loadedScripts = new Map();
+
+  function setCameraStatus(text, on = false) {
+    $("cameraStatus").textContent = text;
+    $("statusDot").classList.toggle("on", on);
+  }
+
+  function setDiagnostics(text, kind = "notice") {
+    const el = $("diagnostics");
+    el.textContent = text;
+    el.className = kind === "error" ? "notice error" : kind === "warning" ? "notice warning" : "notice";
+  }
+
+  function showSystemNotice(text, isError = false) {
+    $("topNotice").textContent = text;
+    $("topNotice").className = isError ? "notice error" : "notice warning";
+  }
+
+  function loadPinnedScript(src, globalName) {
+    if (typeof window[globalName] === "function") return Promise.resolve();
+    if (loadedScripts.has(src)) return loadedScripts.get(src);
+    const promise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.referrerPolicy = "no-referrer";
+      script.onload = () => typeof window[globalName] === "function"
+        ? resolve()
+        : reject(new Error(`Loaded ${globalName} script but its API was not found.`));
+      script.onerror = () => reject(new Error(`Could not download ${globalName} from the CDN.`));
+      document.head.appendChild(script);
+    }).catch(error => {
+      loadedScripts.delete(src);
+      throw error;
+    });
+    loadedScripts.set(src, promise);
+    return promise;
+  }
+
+  function stopTracks(stream) {
+    if (!stream) return;
+    for (const track of stream.getTracks()) {
+      try { track.stop(); } catch (error) { console.warn("Could not stop a media track:", error); }
+    }
+  }
+
+  async function closeModels() {
+    const face = state.faceModel;
+    const hand = state.handModel;
+    state.faceModel = null;
+    state.handModel = null;
+    try { if (face && typeof face.close === "function") await face.close(); }
+    catch (error) { console.warn("Face model cleanup:", error); }
+    try { if (hand && typeof hand.close === "function") await hand.close(); }
+    catch (error) { console.warn("Hand model cleanup:", error); }
+  }
+
+  async function waitForInFlight() {
+    const job = state.inFlight;
+    if (!job) return;
+    try { await job; } catch (_) { /* the inference error was already reported */ }
+  }
+
+  function clearOverlay() {
+    overlayCtx.clearRect(0, 0, overlay.width, overlay.height);
+  }
+
+  function setCameraButton() {
+    const button = $("cameraToggle");
+    if (state.starting) {
+      button.textContent = "Cancel startup";
+      button.classList.remove("primary", "danger");
+      button.disabled = false;
+    } else if (state.active) {
+      button.textContent = "Stop camera";
+      button.classList.remove("primary");
+      button.classList.add("danger");
+      button.disabled = false;
+    } else {
+      button.textContent = "Start camera";
+      button.classList.remove("danger");
+      button.classList.add("primary");
+      button.disabled = !$("privacyConsent").checked;
+    }
+  }
+
+  function setBusySetupControls(busy) {
+    $("privacyConsent").disabled = busy || state.active;
+    $("handsEnabled").disabled = busy || state.active;
+    document.querySelectorAll(".mode-button").forEach(button => { button.disabled = busy; });
+    $("sensitivity").disabled = busy;
+    $("recalibrateButton").disabled = busy || !state.active;
+  }
+
+  function resetCalibration(reason = "Look at your usual study target and sit naturally.") {
+    state.baseline = null;
+    state.calibrationStartAt = performance.now();
+    state.lastCalibrationCandidateAt = 0;
+    state.calibrationCandidates = [];
+    state.scoreSmoothing = [];
+    state.lastValidSampleAt = 0;
+    state.currentScore = null;
+    state.currentQuality = 0;
+    updateCalibrationUI();
+    updateScoreUI(null, 0, reason);
+  }
+
+  function median(values) {
+    if (!values.length) return 0;
+    const sorted = [...values].sort((a, b) => a - b);
+    const middle = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+  }
+
+  function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+
+  function robustCenterAndTolerance(samples, key, minimum, maximum) {
+    const values = samples.map(sample => sample[key]).filter(Number.isFinite);
+    const center = median(values);
+    const mad = median(values.map(value => Math.abs(value - center)));
+    // 1.4826 * MAD estimates the standard deviation for normally distributed noise.
+    // Floors prevent over-fitting sensor jitter; caps avoid an overly broad baseline.
+    const tolerance = clamp(2.5 * 1.4826 * mad, minimum, maximum);
+    return { center, tolerance };
+  }
+
+  const FEATURE_LIMITS = {
+    gazeX: [0.10, 0.22],
+    gazeY: [0.065, 0.17],
+    yaw: [0.055, 0.15],
+    pitch: [0.055, 0.15],
+    roll: [0.07, 0.22]
+  };
+
+  function makeBaseline(samples) {
+    const baseline = {};
+    for (const [key, limits] of Object.entries(FEATURE_LIMITS)) {
+      baseline[key] = robustCenterAndTolerance(samples, key, limits[0], limits[1]);
+    }
+    baseline.sampleCount = samples.length;
+    baseline.mode = state.mode;
+    baseline.createdAtElapsedMs = performance.now() - state.sessionStartAt;
+    return baseline;
+  }
+
+  function extractEye(landmarks, irisIndex, cornerA, cornerB, lidTop, lidBottom) {
+    const iris = landmarks[irisIndex];
+    const a = landmarks[cornerA];
+    const b = landmarks[cornerB];
+    const top = landmarks[lidTop];
+    const bottom = landmarks[lidBottom];
+    if (!iris || !a || !b || !top || !bottom) return null;
+    const left = a.x < b.x ? a : b;
+    const right = a.x < b.x ? b : a;
+    const width = right.x - left.x;
+    if (!Number.isFinite(width) || width < 0.003) return null;
+    const horizontal = (iris.x - left.x) / width;
+    const vertical = (iris.y - (top.y + bottom.y) / 2) / width;
+    const aperture = Math.abs(top.y - bottom.y) / width;
+    if (![horizontal, vertical, aperture].every(Number.isFinite)) return null;
+    return { horizontal, vertical, aperture, width };
+  }
+
+  function extractFaceMetrics(landmarks) {
+    if (!landmarks || landmarks.length < 478) return null;
+    const eyeA = extractEye(landmarks, 468, 33, 133, 159, 145);
+    const eyeB = extractEye(landmarks, 473, 362, 263, 386, 374);
+    const leftSide = landmarks[234];
+    const rightSide = landmarks[454];
+    const forehead = landmarks[10];
+    const chin = landmarks[152];
+    const nose = landmarks[1];
+    const eyeOuterA = landmarks[33];
+    const eyeOuterB = landmarks[263];
+    if (!eyeA || !eyeB || !leftSide || !rightSide || !forehead || !chin || !nose || !eyeOuterA || !eyeOuterB) return null;
+
+    const faceWidth = Math.abs(rightSide.x - leftSide.x);
+    const faceHeight = Math.abs(chin.y - forehead.y);
+    const aperture = (eyeA.aperture + eyeB.aperture) / 2;
+    if (faceWidth < 0.07 || faceHeight < 0.08 || aperture < 0.035 || aperture > 0.7) return null;
+
+    const midFaceX = (leftSide.x + rightSide.x) / 2;
+    const gazeX = (eyeA.horizontal + eyeB.horizontal) / 2;
+    const gazeY = (eyeA.vertical + eyeB.vertical) / 2;
+    const yaw = (nose.x - midFaceX) / faceWidth;
+    const pitch = (nose.y - forehead.y) / faceHeight;
+    const roll = Math.atan2(eyeOuterB.y - eyeOuterA.y, eyeOuterB.x - eyeOuterA.x);
+    const values = { gazeX, gazeY, yaw, pitch, roll };
+    if (!Object.values(values).every(Number.isFinite)) return null;
+    // Reject clearly impossible/occluded eye ratios rather than forcing a score.
+    if (gazeX < -0.25 || gazeX > 1.25 || gazeY < -0.5 || gazeY > 0.5) return null;
+
+    return {
+      ...values,
+      aperture,
+      faceWidth,
+      faceHeight,
+      normalizedFaceSize: faceWidth,
+      imageWidth: video.videoWidth || 640,
+      imageHeight: video.videoHeight || 480
+    };
+  }
+
+  function handleFaceResults(results, token) {
+    if (!state.active || token !== state.generation) return;
+    const now = performance.now();
+    const landmarks = results.multiFaceLandmarks && results.multiFaceLandmarks[0];
+    state.lastFaceSeenAt = landmarks ? now : 0;
+    state.faceLandmarks = landmarks || null;
+    if (!landmarks) {
+      state.faceMetrics = null;
+      state.lastValidFaceAt = 0;
+      updateMetricsUI();
+      drawOverlay();
+      return;
+    }
+    const metrics = extractFaceMetrics(landmarks);
+    if (metrics) {
+      state.faceMetrics = metrics;
+      state.lastValidFaceAt = now;
+      if (!state.baseline && now - state.lastCalibrationCandidateAt >= CALIBRATION_SAMPLE_MS) {
+        state.lastCalibrationCandidateAt = now;
+        state.calibrationCandidates.push(metrics);
+        maybeFinishCalibration(now);
+      }
+    }
+    updateMetricsUI();
+    updateCalibrationUI();
+    drawOverlay();
+  }
+
+  function handleHandResults(results, token) {
+    if (!state.active || token !== state.generation) return;
+    const now = performance.now();
+    const landmarks = results.multiHandLandmarks && results.multiHandLandmarks[0];
+    state.handLandmarks = landmarks || null;
+    state.lastHandAt = landmarks ? now : 0;
+    if (!landmarks || !landmarks[8]) {
+      state.handPoints = [];
+      state.handSpeed = null;
+    } else {
+      const tip = landmarks[8];
+      state.handPoints.push({ x: tip.x, y: tip.y, t: now });
+      state.handPoints = state.handPoints.filter(point => now - point.t <= 800);
+      if (state.handPoints.length >= 2) {
+        let path = 0;
+        for (let i = 1; i < state.handPoints.length; i++) {
+          path += Math.hypot(state.handPoints[i].x - state.handPoints[i - 1].x,
+                             state.handPoints[i].y - state.handPoints[i - 1].y);
+        }
+        const seconds = (state.handPoints[state.handPoints.length - 1].t - state.handPoints[0].t) / 1000;
+        state.handSpeed = seconds > 0 ? path / seconds : null;
+      } else {
+        state.handSpeed = null;
+      }
+    }
+    updateMetricsUI();
+    drawOverlay();
+  }
+
+  function maybeFinishCalibration(now) {
+    const elapsed = now - state.calibrationStartAt;
+    if (elapsed < CALIBRATION_MS || state.calibrationCandidates.length < MIN_CALIBRATION_SAMPLES) return;
+    state.baseline = makeBaseline(state.calibrationCandidates);
+    state.scoreSmoothing = [];
+    $("calibrationBadge").textContent = "Baseline ready";
+    $("calibrationBadge").style.color = "var(--green)";
+    setDiagnostics(`Calibration complete (${state.baseline.sampleCount} valid samples). Estimate is relative to this session's baseline.`);
+    updateCalibrationUI();
+  }
+
+  function updateCalibrationUI() {
+    const elapsed = state.calibrationStartAt ? performance.now() - state.calibrationStartAt : 0;
+    const pct = state.baseline ? 100 : Math.min(99, 100 * elapsed / CALIBRATION_MS);
+    $("calibrationBar").style.width = `${pct}%`;
+    $("calibrationPercent").textContent = `${Math.round(pct)}%`;
+    if (state.baseline) {
+      $("calibrationText").textContent = `${state.baseline.sampleCount} valid samples collected`;
+      $("calibrationBadge").textContent = "Baseline ready";
+      $("calibrationBadge").style.color = "var(--green)";
+    } else if (!state.active) {
+      $("calibrationText").textContent = "Waiting for camera";
+      $("calibrationBadge").textContent = "Not calibrated";
+      $("calibrationBadge").style.color = "var(--muted)";
+    } else if (elapsed < CALIBRATION_MS) {
+      $("calibrationText").textContent = `Collecting stable frames · ${state.calibrationCandidates.length} valid samples`;
+      $("calibrationBadge").textContent = "Calibrating";
+      $("calibrationBadge").style.color = "var(--blue)";
+    } else {
+      $("calibrationText").textContent = `Need at least ${MIN_CALIBRATION_SAMPLES} valid samples · ${state.calibrationCandidates.length} collected`;
+      $("calibrationBadge").textContent = "Need clearer input";
+      $("calibrationBadge").style.color = "var(--amber)";
+    }
+    $("recalibrateButton").disabled = !state.active || state.starting;
+  }
+
+  function sensitivityMultiplier() {
+    return state.sensitivity === "strict" ? 0.8 : state.sensitivity === "relaxed" ? 1.25 : 1;
+  }
+
+  function alignmentSubscore(value, base) {
+    const delta = Math.abs(value - base.center);
+    const effectiveTolerance = base.tolerance * sensitivityMultiplier();
+    const z = delta / Math.max(effectiveTolerance, 0.00001);
+    // Smooth decay avoids a brittle binary threshold. This is an explicit heuristic.
+    return 100 / (1 + z * z);
+  }
+
+  function estimateScore(metrics) {
+    if (!state.baseline || !metrics || state.baseline.mode !== state.mode) return null;
+    const gaze = (alignmentSubscore(metrics.gazeX, state.baseline.gazeX) +
+                  alignmentSubscore(metrics.gazeY, state.baseline.gazeY)) / 2;
+    const head = (alignmentSubscore(metrics.yaw, state.baseline.yaw) +
+                  alignmentSubscore(metrics.pitch, state.baseline.pitch) +
+                  alignmentSubscore(metrics.roll, state.baseline.roll)) / 3;
+    return clamp(0.74 * gaze + 0.26 * head, 0, 100);
+  }
+
+  function inputQuality(now) {
+    if (!state.faceMetrics || !state.lastValidFaceAt || now - state.lastValidFaceAt > 1400) return 0;
+    const faceSizeScore = clamp((state.faceMetrics.normalizedFaceSize - 0.08) / 0.22, 0, 1);
+    const apertureScore = clamp((state.faceMetrics.aperture - 0.035) / 0.12, 0, 1);
+    const freshnessScore = clamp(1 - (now - state.lastValidFaceAt) / 1400, 0, 1);
+    return Math.round(clamp(45 + 25 * faceSizeScore + 20 * apertureScore + 10 * freshnessScore, 0, 100));
+  }
+
+  function getFreshMetrics(now) {
+    return state.faceMetrics && state.lastValidFaceAt && now - state.lastValidFaceAt <= 1400
+      ? state.faceMetrics : null;
+  }
+
+  function formatDuration(seconds) {
+    const total = Math.max(0, Math.floor(seconds));
+    return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+  }
+
+  function updateScoreUI(score, quality, reason) {
+    state.currentScore = score == null ? null : Math.round(clamp(score, 0, 100));
+    state.currentQuality = quality || 0;
+    $("scoreValue").textContent = state.currentScore == null ? "—" : String(state.currentScore);
+    const offset = state.currentScore == null ? SCORE_RING_LENGTH : SCORE_RING_LENGTH * (1 - state.currentScore / 100);
+    $("scoreRing").setAttribute("stroke-dashoffset", String(offset));
+    $("qualityValue").textContent = quality == null || quality <= 0 ? "Unavailable" : `${quality}/100`;
+    $("qualityBar").style.width = `${quality || 0}%`;
+    $("scoreExplanation").textContent = reason;
+    if (state.currentScore == null) {
+      $("scoreBadge").textContent = state.active ? "Insufficient signal" : "Awaiting data";
+      $("scoreBadge").style.color = "var(--amber)";
+    } else {
+      $("scoreBadge").textContent = "Experimental estimate";
+      $("scoreBadge").style.color = "var(--teal)";
+    }
+  }
+
+  function updateMetricsUI() {
+    const now = performance.now();
+    const valid = getFreshMetrics(now);
+    $("gazeValue").textContent = valid ? Math.hypot(valid.gazeX - (state.baseline?.gazeX.center ?? valid.gazeX), valid.gazeY - (state.baseline?.gazeY.center ?? valid.gazeY)).toFixed(3) : "—";
+    $("headValue").textContent = valid ? Math.hypot(valid.yaw - (state.baseline?.yaw.center ?? valid.yaw), valid.pitch - (state.baseline?.pitch.center ?? valid.pitch)).toFixed(3) : "—";
+    const handFresh = state.lastHandAt && now - state.lastHandAt < 1400;
+    $("handValue").textContent = !$("handsEnabled").checked ? "Off" : handFresh && state.handSpeed != null ? `${state.handSpeed.toFixed(3)}/s` : "—";
+    $("handState").textContent = !$("handsEnabled").checked ? "Off" : handFresh ? "Detected" : state.active ? "Not detected" : "Off";
+  }
+
+  function drawOverlay() {
+    if (!state.active || !$("showLandmarks").checked || !video.videoWidth || !video.videoHeight) {
+      clearOverlay(); return;
+    }
+    const width = video.videoWidth;
+    const height = video.videoHeight;
+    if (overlay.width !== width || overlay.height !== height) {
+      overlay.width = width;
+      overlay.height = height;
+    }
+    overlayCtx.clearRect(0, 0, width, height);
+    const face = state.faceLandmarks;
+    if (face) {
+      overlayCtx.fillStyle = "rgba(94,234,212,.9)";
+      [468,473,1,152,10].forEach(index => {
+        const point = face[index];
+        if (!point) return;
+        overlayCtx.beginPath();
+        overlayCtx.arc(point.x * width, point.y * height, Math.max(3, width / 240), 0, Math.PI * 2);
+        overlayCtx.fill();
+      });
+    }
+    const hands = state.handLandmarks;
+    if (hands) {
+      overlayCtx.fillStyle = "rgba(125,211,252,.9)";
+      [0,4,8,12,16,20].forEach(index => {
+        const point = hands[index];
+        if (!point) return;
+        overlayCtx.beginPath();
+        overlayCtx.arc(point.x * width, point.y * height, Math.max(2, width / 320), 0, Math.PI * 2);
+        overlayCtx.fill();
+      });
+    }
+  }
+
+  function drawHistory() {
+    const rect = graph.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const targetWidth = Math.round(rect.width * dpr);
+    const targetHeight = Math.round(rect.height * dpr);
+    if (graph.width !== targetWidth || graph.height !== targetHeight) {
+      graph.width = targetWidth;
+      graph.height = targetHeight;
+    }
+    const ctx = graphCtx;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const w = rect.width, h = rect.height;
+    ctx.clearRect(0, 0, w, h);
+    const pad = { left: 34, right: 8, top: 10, bottom: 28 };
+    const plotW = w - pad.left - pad.right;
+    const plotH = h - pad.top - pad.bottom;
+    const yFor = value => pad.top + plotH * (1 - value / 100);
+    ctx.font = "10px ui-sans-serif, system-ui, sans-serif";
+    ctx.textBaseline = "middle";
+    for (let tick = 0; tick <= 100; tick += 20) {
+      const y = yFor(tick);
+      ctx.strokeStyle = "#253247";
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(w - pad.right, y); ctx.stroke();
+      ctx.fillStyle = "#8292a8";
+      ctx.textAlign = "right";
+      ctx.fillText(String(tick), pad.left - 7, y);
+    }
+    const labels = [{v:0,t:"−30s"},{v:1/3,t:"−20s"},{v:2/3,t:"−10s"},{v:1,t:"now"}];
+    labels.forEach(label => {
+      const x = pad.left + plotW * label.v;
+      ctx.strokeStyle = "#192537";
+      ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top + plotH); ctx.stroke();
+      ctx.fillStyle = "#8292a8";
+      ctx.textAlign = label.v === 0 ? "left" : label.v === 1 ? "right" : "center";
+      ctx.fillText(label.t, x, h - 11);
+    });
+    const nowElapsed = performance.now() - state.sessionStartAt;
+    let started = false;
+    ctx.beginPath();
+    ctx.strokeStyle = "#5eead4";
+    ctx.lineWidth = 2;
+    for (const point of state.points) {
+      const age = nowElapsed - point.elapsedMs;
+      if (age < 0 || age > WINDOW_MS || point.score == null) { started = false; continue; }
+      const x = pad.left + plotW * (1 - age / WINDOW_MS);
+      const y = yFor(point.score);
+      if (!started) { ctx.moveTo(x, y); started = true; }
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    const latest = [...state.points].reverse().find(point => point.score != null && nowElapsed - point.elapsedMs <= WINDOW_MS);
+    if (latest) {
+      const age = nowElapsed - latest.elapsedMs;
+      const x = pad.left + plotW * (1 - age / WINDOW_MS);
+      const y = yFor(latest.score);
+      ctx.fillStyle = "#99f6e4";
+      ctx.beginPath(); ctx.arc(x, y, 3.2, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  function updateSessionStats() {
+    const elapsed = state.sessionStartAt ? (performance.now() - state.sessionStartAt) / 1000 : 0;
+    $("elapsedStat").textContent = formatDuration(elapsed);
+    const valid = state.allSamples.filter(sample => Number.isFinite(sample.score));
+    const mean = valid.length ? valid.reduce((sum, sample) => sum + sample.score, 0) / valid.length : null;
+    $("meanStat").textContent = mean == null ? "—" : Math.round(mean);
+    const totalTicks = state.allSamples.length;
+    $("coverageStat").textContent = totalTicks ? `${Math.round(valid.length / totalTicks * 100)}%` : "0%";
+    updateSelfCheckSummary();
+  }
+
+  function pearson(a, b) {
+    if (a.length !== b.length || a.length < 2) return null;
+    const meanA = a.reduce((s,v) => s + v, 0) / a.length;
+    const meanB = b.reduce((s,v) => s + v, 0) / b.length;
+    let covariance = 0, va = 0, vb = 0;
+    for (let i = 0; i < a.length; i++) {
+      const da = a[i] - meanA, db = b[i] - meanB;
+      covariance += da * db; va += da * da; vb += db * db;
+    }
+    const den = Math.sqrt(va * vb);
+    return den > 0 ? covariance / den : null;
+  }
+
+  function averageRanks(values) {
+    const sorted = values.map((value, index) => ({ value, index })).sort((a,b) => a.value - b.value);
+    const ranks = new Array(values.length);
+    let i = 0;
+    while (i < sorted.length) {
+      let j = i + 1;
+      while (j < sorted.length && sorted[j].value === sorted[i].value) j++;
+      const rank = ((i + 1) + j) / 2;
+      for (let k = i; k < j; k++) ranks[sorted[k].index] = rank;
+      i = j;
+    }
+    return ranks;
+  }
+
+  function spearman(checks) {
+    if (checks.length < 8) return null;
+    const x = averageRanks(checks.map(check => check.score));
+    const y = averageRanks(checks.map(check => check.rating));
+    return pearson(x, y);
+  }
+
+  function updateSelfCheckSummary() {
+    const count = state.selfChecks.length;
+    if (!count) {
+      $("validationText").textContent = "No self-checks recorded. A valid estimate is required to log one.";
+      return;
+    }
+    const r = spearman(state.selfChecks);
+    if (r == null) {
+      $("validationText").textContent = `${count} self-check(s) recorded. At least 8 checks with variation in both measures are needed for an exploratory rank correlation.`;
+    } else {
+      $("validationText").textContent = `${count} checks · exploratory Spearman ρ = ${r.toFixed(2)}. This is a small, self-reported within-session association—not accuracy, proof, or a scientific validation.`;
+    }
+  }
+
+  function addSample() {
+    if (!state.active) return;
+    const now = performance.now();
+    if (state.lastSampleAt && now - state.lastSampleAt < SAMPLE_MS - 60) return;
+    state.lastSampleAt = now;
+    maybeFinishCalibration(now);
+
+    const metrics = getFreshMetrics(now);
+    const quality = inputQuality(now);
+    let rawScore = null;
+    let message;
+    if (!state.baseline) {
+      message = `Calibrating your normal ${state.mode === "pc" ? "screen" : state.mode === "reading" ? "reading" : "notebook"} posture. Keep your usual gaze for about 10 seconds.`;
+    } else if (!metrics) {
+      message = "Insufficient visual input. Check lighting, framing, and whether both eyes are visible. No low score has been assigned.";
+    } else {
+      rawScore = estimateScore(metrics);
+      message = "Estimate compares visual signals with your personal baseline. It cannot determine whether you are mentally focused or understanding the material.";
+    }
+
+    if (rawScore == null) {
+      if (!state.lastValidSampleAt || now - state.lastValidSampleAt > 2500) state.scoreSmoothing = [];
+    } else {
+      state.lastValidSampleAt = now;
+      state.scoreSmoothing.push(rawScore);
+      if (state.scoreSmoothing.length > 5) state.scoreSmoothing.shift();
+    }
+    const displayScore = rawScore == null ? null : median(state.scoreSmoothing);
+    updateScoreUI(displayScore, quality, message);
+
+    const elapsedMs = now - state.sessionStartAt;
+    const point = {
+      elapsedMs,
+      elapsedSeconds: Math.floor(elapsedMs / 1000),
+      score: displayScore,
+      quality: quality || 0,
+      mode: state.mode,
+      sensitivity: state.sensitivity
+    };
+    state.points.push(point);
+    if (state.points.length > 30) state.points.shift();
+    state.allSamples.push(point);
+    updateMetricsUI();
+    drawHistory();
+    updateSessionStats();
+  }
+
+  async function inferenceLoop(token) {
+    if (!state.active || token !== state.generation) return;
+    const now = performance.now();
+    if (now - state.lastInferenceAt >= 105 && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      state.lastInferenceAt = now;
+      const job = (async () => {
+        if (state.faceModel) await state.faceModel.send({ image: video });
+        if (state.active && token === state.generation && state.handModel && $("handsEnabled").checked) {
+          await state.handModel.send({ image: video });
+        }
+      })();
+      state.inFlight = job;
+      try { await job; }
+      catch (error) {
+        console.error("MediaPipe inference error:", error);
+        if (state.active && token === state.generation) setDiagnostics("A frame could not be analyzed. The app will try again on the next frame.", "warning");
+      } finally {
+        if (state.inFlight === job) state.inFlight = null;
+      }
+    }
+    if (state.active && token === state.generation) {
+      state.rafId = requestAnimationFrame(() => inferenceLoop(token));
+    }
+  }
+
+  async function startCamera() {
+    if (state.active || state.starting) return;
+    if (!( $("privacyConsent").checked )) {
+      showSystemNotice("Please read and check the privacy consent before starting camera processing.", true);
+      return;
+    }
+    state.starting = true;
+    const token = ++state.generation;
+    setCameraButton();
+    setBusySetupControls(true);
+    setCameraStatus("Requesting camera…");
+    showSystemNotice("Camera startup requested. You can cancel startup at any time.");
+
+    let newlyRequestedStream = null;
+    try {
+      if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== "function") {
+        throw new Error("Camera access is not available here. Use a supported browser over HTTPS or localhost.");
+      }
+      // Request video only—never request microphone audio.
+      newlyRequestedStream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }
+      });
+      if (token !== state.generation) { stopTracks(newlyRequestedStream); return; }
+      state.stream = newlyRequestedStream;
+      for (const track of state.stream.getVideoTracks()) {
+        track.addEventListener("ended", () => {
+          if (token === state.generation && (state.active || state.starting)) {
+            void stopCamera({ reason: "The camera track ended" });
+          }
+        }, { once: true });
+      }
+      video.srcObject = state.stream;
+      await video.play();
+      if (token !== state.generation) { stopTracks(newlyRequestedStream); return; }
+      // Show the live preview as soon as the browser grants camera access, including while models load.
+      $("cameraPlaceholder").style.display = "none";
+      video.classList.remove("sr-only");
+      setCameraStatus("Camera on · loading model…", true);
+
+      setCameraStatus("Loading face model…", true);
+      await loadPinnedScript(FACE_JS, "FaceMesh");
+      if (token !== state.generation) return;
+      state.faceModel = new window.FaceMesh({ locateFile: file => `${FACE_BASE}/${file}` });
+      state.faceModel.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.55, minTrackingConfidence: 0.55 });
+      state.faceModel.onResults(results => handleFaceResults(results, token));
+
+      if ($("handsEnabled").checked) {
+        setCameraStatus("Loading optional hand model…", true);
+        await loadPinnedScript(HAND_JS, "Hands");
+        if (token !== state.generation) return;
+        state.handModel = new window.Hands({ locateFile: file => `${HAND_BASE}/${file}` });
+        state.handModel.setOptions({ maxNumHands: 1, modelComplexity: 0, minDetectionConfidence: 0.55, minTrackingConfidence: 0.55 });
+        state.handModel.onResults(results => handleHandResults(results, token));
+      }
+      if (token !== state.generation) return;
+
+      state.active = true;
+      state.starting = false;
+      state.lastInferenceAt = 0;
+      state.lastSampleAt = 0;
+      state.sessionStartAt = state.sessionStartAt || performance.now();
+      resetCalibration("Calibration started. Look at your usual study target and sit naturally.");
+      $("cameraPlaceholder").style.display = "none";
+      video.classList.remove("sr-only");
+      setCameraStatus("Camera active", true);
+      setCameraButton();
+      setBusySetupControls(false);
+      $("handsEnabled").disabled = true;
+      $("privacyConsent").disabled = true;
+      setDiagnostics("Camera is active. Collecting valid frames; no camera or session data is being uploaded.");
+      showSystemNotice("Camera active. The estimate will remain unavailable until personal calibration and usable visual input are available.");
+      state.rafId = requestAnimationFrame(() => inferenceLoop(token));
+      if (state.sampleInterval) clearInterval(state.sampleInterval);
+      state.sampleInterval = window.setInterval(addSample, SAMPLE_MS);
+    } catch (error) {
+      console.error("Camera startup failed:", error);
+      if (newlyRequestedStream && token !== state.generation) stopTracks(newlyRequestedStream);
+      if (token === state.generation) {
+        await stopCamera({ reason: "Startup failed", keepNotice: true });
+        setCameraStatus("Camera off");
+        let detail = "Camera/model startup failed. Check browser permissions and internet access for the pinned model files.";
+        if (error && error.name === "NotAllowedError") detail = "Camera permission was denied. Allow camera access in the browser site settings, then retry.";
+        else if (error && error.name === "NotFoundError") detail = "No compatible camera was found.";
+        else if (error && error.name === "NotReadableError") detail = "The camera may already be in use by another app. Close that app and retry.";
+        else if (error && error.message) detail = error.message;
+        showSystemNotice(detail, true);
+        setDiagnostics(detail, "error");
+      }
+    } finally {
+      if (token === state.generation) {
+        state.starting = false;
+        setCameraButton();
+        setBusySetupControls(false);
+        if (state.active) {
+          $("handsEnabled").disabled = true;
+          $("privacyConsent").disabled = true;
+        }
+      }
+    }
+  }
+
+  async function cancelStartup() {
+    if (!state.starting) return;
+    ++state.generation;
+    state.starting = false;
+    state.active = false;
+    if (state.stream) stopTracks(state.stream);
+    state.stream = null;
+    video.pause();
+    video.srcObject = null;
+    video.classList.add("sr-only");
+    $("cameraPlaceholder").style.display = "";
+    setCameraStatus("Startup cancelled");
+    setCameraButton();
+    setBusySetupControls(false);
+    await closeModels();
+    setDiagnostics("Startup cancelled. Any granted camera tracks have been stopped.");
+  }
+
+  async function stopCamera(options = {}) {
+    const reason = options.reason || "Camera stopped";
+    if (state.starting && !state.active) {
+      await cancelStartup();
+      return;
+    }
+    ++state.generation;
+    state.active = false;
+    state.starting = false;
+    if (state.rafId) cancelAnimationFrame(state.rafId);
+    state.rafId = 0;
+    if (state.sampleInterval) clearInterval(state.sampleInterval);
+    state.sampleInterval = null;
+    // Release capture first; wait for any in-progress inference before closing its model.
+    stopTracks(state.stream);
+    state.stream = null;
+    video.pause();
+    video.srcObject = null;
+    video.classList.add("sr-only");
+    $("cameraPlaceholder").style.display = "";
+    await waitForInFlight();
+    await closeModels();
+    state.faceMetrics = null;
+    state.faceLandmarks = null;
+    state.handLandmarks = null;
+    state.lastValidFaceAt = 0;
+    state.lastFaceSeenAt = 0;
+    state.lastHandAt = 0;
+    state.handPoints = [];
+    state.handSpeed = null;
+    clearOverlay();
+    updateMetricsUI();
+    updateScoreUI(null, 0, "Camera stopped. Previous session samples remain in memory until you clear them or leave the page.");
+    setCameraStatus("Camera off");
+    setCameraButton();
+    setBusySetupControls(false);
+    setDiagnostics(`${reason}. Camera tracks stopped and model instances closed.`);
+    if (!options.keepNotice) showSystemNotice("Camera is off. Session data remains only in page memory until you clear it or leave the page.");
+  }
+
+  function startNewCalibration() {
+    if (!state.active) return;
+    state.faceMetrics = null;
+    state.lastValidFaceAt = 0;
+    resetCalibration("Recalibration started. Return to your usual study posture.");
+    setDiagnostics("Recalibrating for the selected study mode.");
+  }
+
+  function resetSessionData() {
+    const now = performance.now();
+    state.sessionStartAt = state.active ? now : 0;
+    state.points = [];
+    state.allSamples = [];
+    state.selfChecks = [];
+    state.scoreSmoothing = [];
+    state.lastSampleAt = 0;
+    state.currentScore = null;
+    state.faceMetrics = null;
+    state.lastValidFaceAt = 0;
+    state.faceLandmarks = null;
+    state.handLandmarks = null;
+    state.handPoints = [];
+    state.handSpeed = null;
+    resetCalibration(state.active ? "Session data cleared. A new personal baseline is required." : "Session data cleared. Start the camera to calibrate.");
+    updateSessionStats();
+    drawHistory();
+    updateMetricsUI();
+    $("exportStatus").textContent = "Session data was cleared from page memory. Nothing is saved automatically.";
+  }
+
+  function logSelfCheck() {
+    if (state.currentScore == null) {
+      $("validationText").textContent = "No valid estimate is available right now. Wait for calibration and a fresh visual signal before logging a self-check.";
+      return;
+    }
+    const rating = Number($("selfRating").value);
+    state.selfChecks.push({
+      elapsedSeconds: Math.floor((performance.now() - state.sessionStartAt) / 1000),
+      score: state.currentScore,
+      rating,
+      mode: state.mode
+    });
+    updateSelfCheckSummary();
+    $("exportStatus").textContent = `Self-check recorded in page memory (${state.selfChecks.length} total). Nothing was uploaded.`;
+  }
+
+  function csvCell(value) {
+    const string = value == null ? "" : String(value);
+    return `"${string.replace(/"/g, '""')}"`;
+  }
+
+  function exportCSV() {
+    if (!state.allSamples.length && !state.selfChecks.length) {
+      $("exportStatus").textContent = "There is no session data to export yet.";
+      return;
+    }
+    const rows = [["record_type","elapsed_seconds","study_mode","sensitivity","activity_estimate","input_quality","self_rating","note"]];
+    for (const sample of state.allSamples) {
+      rows.push(["sample", sample.elapsedSeconds, sample.mode, sample.sensitivity,
+        sample.score == null ? "" : Math.round(sample.score), sample.quality, "",
+        sample.score == null ? "Estimate unavailable" : "Experimental visual alignment heuristic"]);
+    }
+    for (const check of state.selfChecks) {
+      rows.push(["self_check", check.elapsedSeconds, check.mode, "", check.score, "", check.rating,
+        "Self-reported; not ground truth"]);
+    }
+    const csv = "\uFEFF" + rows.map(row => row.map(csvCell).join(",")).join("\r\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `focus-flow-session-${new Date().toISOString().slice(0,10)}.csv`;
+    anchor.style.display = "none";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    $("exportStatus").textContent = `CSV export requested for ${state.allSamples.length} samples and ${state.selfChecks.length} self-checks. The file is created locally by your browser.`;
+  }
+
+  function updateTimerUI() {
+    $("timerValue").textContent = formatDuration(state.timerSeconds);
+    $("timerStart").textContent = state.timerRunning ? "Pause" : state.timerCompleted ? "Restart" : "Start";
+    $("timerLabel").textContent = state.timerCompleted ? "Study block complete — consider a break" : state.timerRunning ? "Timer running" : state.timerSeconds === state.timerInitialSeconds ? "Ready for a study block" : "Timer paused";
+  }
+
+  function tickTimer() {
+    if (!state.timerRunning) return;
+    const remaining = Math.max(0, Math.ceil((state.timerEndAt - Date.now()) / 1000));
+    state.timerSeconds = remaining;
+    if (remaining <= 0) {
+      state.timerSeconds = 0;
+      state.timerRunning = false;
+      state.timerCompleted = true;
+      if (state.timerInterval) clearInterval(state.timerInterval);
+      state.timerInterval = null;
+      showSystemNotice("Study block finished. Consider taking a short break; the timer does not judge your productivity.");
+      setDiagnostics("Study timer finished. Camera and visual analysis are unchanged.");
+    }
+    updateTimerUI();
+  }
+
+  function toggleTimer() {
+    if (state.timerRunning) {
+      state.timerSeconds = Math.max(0, Math.ceil((state.timerEndAt - Date.now()) / 1000));
+      state.timerRunning = false;
+      if (state.timerInterval) clearInterval(state.timerInterval);
+      state.timerInterval = null;
+    } else {
+      if (state.timerSeconds <= 0 || state.timerCompleted) {
+        state.timerSeconds = state.timerInitialSeconds;
+        state.timerCompleted = false;
+      }
+      state.timerEndAt = Date.now() + state.timerSeconds * 1000;
+      state.timerRunning = true;
+      if (state.timerInterval) clearInterval(state.timerInterval);
+      state.timerInterval = window.setInterval(tickTimer, 250);
+    }
+    updateTimerUI();
+  }
+
+  function resetTimer() {
+    state.timerRunning = false;
+    state.timerCompleted = false;
+    if (state.timerInterval) clearInterval(state.timerInterval);
+    state.timerInterval = null;
+    state.timerSeconds = state.timerInitialSeconds;
+    updateTimerUI();
+  }
+
+  $("privacyConsent").addEventListener("change", () => {
+    setCameraButton();
+    if ($("privacyConsent").checked) showSystemNotice("Consent recorded for this page session. Camera is still off; press Start camera when ready.");
+  });
+
+  $("cameraToggle").addEventListener("click", async () => {
+    if (state.starting && !state.active) await cancelStartup();
+    else if (state.active) await stopCamera();
+    else await startCamera();
+  });
+
+  document.querySelectorAll(".mode-button").forEach(button => {
+    button.addEventListener("click", () => {
+      if (state.starting) return;
+      const nextMode = button.dataset.mode;
+      if (nextMode === state.mode) return;
+      state.mode = nextMode;
+      document.querySelectorAll(".mode-button").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      $("modeStatus").textContent = nextMode === "pc" ? "PC / screen" : nextMode === "reading" ? "Reading" : "Notebook";
+      if (state.active) startNewCalibration();
+      updateMetricsUI();
+    });
+  });
+
+  $("sensitivity").addEventListener("change", event => {
+    state.sensitivity = event.target.value;
+    if (state.currentScore != null) setDiagnostics(`Sensitivity set to ${state.sensitivity}. This changes tolerance, not validated accuracy.`);
+  });
+
+  $("recalibrateButton").addEventListener("click", startNewCalibration);
+  $("showLandmarks").addEventListener("change", drawOverlay);
+  $("logSelfRating").addEventListener("click", logSelfCheck);
+  $("exportButton").addEventListener("click", exportCSV);
+  $("clearButton").addEventListener("click", () => {
+    // This intentionally clears in-memory data without uploading or asking for confirmation.
+    resetSessionData();
+  });
+  $("timerStart").addEventListener("click", toggleTimer);
+  $("timerReset").addEventListener("click", resetTimer);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && state.active) {
+      // Fail-safe for privacy: automatically turn off camera capture when the app leaves the foreground.
+      stopCamera({ reason: "Camera automatically stopped because this page became hidden" });
+    }
+  });
+  window.addEventListener("pagehide", () => {
+    ++state.generation;
+    state.active = false;
+    state.starting = false;
+    if (state.rafId) cancelAnimationFrame(state.rafId);
+    if (state.sampleInterval) clearInterval(state.sampleInterval);
+    stopTracks(state.stream);
+    state.stream = null;
+    try { video.pause(); video.srcObject = null; } catch (_) {}
+  });
+  window.addEventListener("resize", drawHistory, { passive: true });
+  if ("ResizeObserver" in window) {
+    resizeObserver = new ResizeObserver(drawHistory);
+    resizeObserver.observe(graph);
+  }
+
+  // Initial state: no camera or model requests; session data is memory-only. Site analytics is initialized separately.
+  state.sessionStartAt = 0;
+  state.calibrationStartAt = 0;
+  setCameraButton();
+  setCameraStatus("Camera off");
+  updateCalibrationUI();
+  updateScoreUI(null, 0, "Start the camera to begin. Calibration is required before an estimate is shown.");
+  updateMetricsUI();
+  updateSessionStats();
+  updateTimerUI();
+  drawHistory();
+})();
+</script>
+  
+</body>
+</html>

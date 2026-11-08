@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10131b">
+<meta name="description" content="命の砂時計 — 時間の有限さを、今日を大切にするきっかけに。">
+<title>命の砂時計 — Make Today Count</title>
+<style>
+:root{color-scheme:dark;--bg:#10131b;--panel:#191e2a;--muted:#9ba5b8;--text:#f5f1e8;--gold:#e8bd72;--gold2:#f6dba7;--line:#343b4c}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 5%,#293044 0,#171c28 42%,#10131b 78%);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif}
+main{width:min(960px,calc(100% - 32px));margin:auto;padding:52px 0 36px}
+header{text-align:center;margin-bottom:32px}.eyebrow{color:var(--gold);font-size:11px;letter-spacing:.28em;text-transform:uppercase}
+h1{font-family:Georgia,"Yu Mincho",serif;font-size:clamp(34px,7vw,58px);font-weight:400;letter-spacing:.08em;margin:12px 0 8px}
+.lead{color:#c2c8d3;font-size:14px;line-height:1.9;margin:0 auto;max-width:520px}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.card{background:linear-gradient(145deg,rgba(31,37,52,.96),rgba(22,27,39,.96));border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 18px 55px #0003}
+.visual{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:440px;position:relative;overflow:hidden}
+.glow{position:absolute;width:260px;height:260px;background:#e8bd7212;filter:blur(55px);border-radius:50%}
+.glass{position:relative;width:178px;height:280px;margin:8px 0 22px;filter:drop-shadow(0 14px 24px #0006)}
+.glass svg{width:100%;height:100%;overflow:visible}
+.sand-top{transform-origin:90px 72px;transition:all .6s ease}.sand-bottom{transform-origin:90px 210px;transition:all .6s ease}
+.stream{stroke:var(--gold2);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:4 7;animation:fall 1.3s linear infinite}
+@keyframes fall{to{stroke-dashoffset:-22}}
+.progress-label{color:var(--muted);font-size:12px;letter-spacing:.12em}.percent{font-family:Georgia,serif;font-size:36px;color:var(--gold2);margin-top:4px}
+.bar{width:min(260px,80%);height:4px;border-radius:8px;background:#3a4050;margin-top:13px;overflow:hidden}.bar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#b88a4d,#f6dba7);transition:width .6s}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0 0;width:100%}.stat{background:#ffffff07;border:1px solid #ffffff0d;border-radius:14px;padding:13px;text-align:center}.stat strong{display:block;font-family:Georgia,serif;font-size:25px;font-weight:400;color:var(--gold2)}.stat span{font-size:11px;color:var(--muted)}
+h2{font-size:16px;font-weight:500;margin:0 0 20px;letter-spacing:.04em}
+label{display:block;font-size:12px;color:#c4cbd7;margin:18px 0 8px}
+input{width:100%;background:#101521;border:1px solid #41495b;border-radius:11px;padding:13px 14px;color:var(--text);font:inherit;font-size:16px;outline:none}
+input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #e8bd7220}
+.hint{font-size:11px;color:var(--muted);line-height:1.7;margin:8px 0 0}
+button{width:100%;margin-top:20px;border:0;border-radius:12px;padding:13px;background:linear-gradient(100deg,#d3a65f,#f1d49a);color:#24202a;font-size:14px;font-weight:700;cursor:pointer;transition:transform .2s,filter .2s}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}button:active{transform:translateY(0)}
+.quote{margin:20px 0 0;padding:16px;border-left:2px solid var(--gold);background:#e8bd720a;color:#d9d2c4;font-family:Georgia,"Yu Mincho",serif;font-size:15px;line-height:1.8}
+.note{margin:22px auto 0;max-width:690px;color:#8f99ab;font-size:11px;line-height:1.8;text-align:center}
+footer{text-align:center;color:#697386;font-size:10px;letter-spacing:.12em;margin-top:30px}
+@media(max-width:700px){main{padding-top:34px}.layout{grid-template-columns:1fr}.visual{min-height:390px}.card{padding:22px}.settings{order:-1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="eyebrow">MEMENTO VIVERE · LIVE WITH INTENTION</div>
+<h1>命の砂時計</h1>
+<p class="lead">時間には限りがある。だからこそ、今日という一日には価値がある。<br>未来を怖がるためではなく、今を大切にするための小さな可視化。</p>
+</header>
+<section class="layout">
+<div class="card visual">
+<div class="glow"></div>
+<div class="glass" aria-label="砂時計のイラスト">
+<svg viewBox="0 0 180 280" role="img" aria-hidden="true">
+<defs><clipPath id="topClip"><path d="M36 18 Q36 83 78 125 Q90 137 102 125 Q144 83 144 18Z"/></clipPath><clipPath id="bottomClip"><path d="M78 155 Q90 143 102 155 Q144 197 144 262 L36 262 Q36 197 78 155Z"/></clipPath><linearGradient id="sand" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f6dba7"/><stop offset="1" stop-color="#bd8745"/></linearGradient></defs>
+<path d="M30 14 H150 M30 266 H150" stroke="#d9c9a6" stroke-width="7" stroke-linecap="round"/>
+<path d="M36 18 Q36 83 78 125 Q90 137 102 125 Q144 83 144 18 M36 262 Q36 197 78 155 Q90 143 102 155 Q144 197 144 262" fill="none" stroke="#e6d6b8" stroke-width="4"/>
+<path d="M36 18 H144 V125 Q90 145 36 125Z" fill="#ffffff08" clip-path="url(#topClip)"/>
+<path class="sand-top" d="M39 18 H141 V42 Q90 55 39 42Z" fill="url(#sand)" clip-path="url(#topClip)"/>
+<path class="sand-bottom" d="M90 258 Q55 258 39 250 Q42 210 78 170 Q90 157 102 170 Q138 210 141 250 Q125 258 90 258Z" fill="url(#sand)" clip-path="url(#bottomClip)"/>
+<path class="stream" d="M90 132 L90 184"/>
+<circle cx="90" cy="187" r="2.5" fill="#f6dba7"/>
+</svg>
+</div>
+<div class="progress-label">YOUR TIME, YOUR STORY</div>
+<div class="percent" id="percent">—</div>
+<div class="bar"><span id="bar"></span></div>
+<div class="stats">
+<div class="stat"><strong id="remaining">—</strong><span>想定上の残り年数</span></div>
+<div class="stat"><strong id="days">—</strong><span>想定上の残り日数</span></div>
+</div>
+</div>
+<div class="card settings">
+<h2>⌁ あなたの砂時計を設定</h2>
+<label for="age">現在の年齢</label>
+<input id="age" type="number" min="0" max="120" inputmode="numeric" placeholder="例：20">
+<label for="life">想定する人生の長さ（年）</label>
+<input id="life" type="number" min="1" max="120" value="90" inputmode="numeric">
+<p class="hint">入力した年齢と年数をもとに、時間をイメージとして表示するよ。誕生日や名前などの個人情報は不要。</p>
+<button id="start">砂時計をセットする</button>
+<div class="quote" id="message">「いつか」ではなく、「今日」から。<br>あなたの時間の使い方は、あなたが決めていい。</div>
+</div>
+</section>
+<p class="note">※これは設定した年数を使ったイメージ表現であり、寿命・健康状態・将来を予測するものではありません。表示はいつでも変更できます。入力内容はこのブラウザ内だけに保存され、サーバーには送信されません。</p>
+<footer>MAKE TODAY COUNT · INOCHI NO SUNADOKEI</footer>
+</main>
+<script>
+const ageInput=document.getElementById('age'),lifeInput=document.getElementById('life');
+const percentEl=document.getElementById('percent'),bar=document.getElementById('bar'),remainingEl=document.getElementById('remaining'),daysEl=document.getElementById('days'),message=document.getElementById('message');
+function render(){
+ const age=Number(ageInput.value),life=Number(lifeInput.value);
+ if(ageInput.value===''||!Number.isFinite(age)||!Number.isFinite(life)||age<0||life<1||age>120||life>120||life<=age){
+  percentEl.textContent='—';bar.style.width='0%';remainingEl.textContent='—';daysEl.textContent='—';
+  message.innerHTML='年齢と想定年数を入力してね。<br>あなた自身のペースで設定できるよ。';return;
+ }
+ const remaining=life-age,ratio=remaining/life*100,days=Math.round(remaining*365.2425);
+ percentEl.textContent=ratio.toFixed(1)+'%';bar.style.width=ratio+'%';
+ remainingEl.textContent=remaining.toFixed(1);daysEl.textContent=days.toLocaleString('ja-JP');
+ message.innerHTML=remaining>30?'まだまだ、これから描けるページがたくさんある。<br>今日の小さな一歩も、未来につながっている。':'残り時間の数字に縛られなくて大丈夫。<br>大切なのは、今日をどう過ごすか。';
+ try{localStorage.setItem('inochi-hourglass-settings',JSON.stringify({age,life}));}catch(e){}
+}
+try{const saved=JSON.parse(localStorage.getItem('inochi-hourglass-settings')||'null');if(saved){ageInput.value=saved.age;lifeInput.value=saved.life;}}catch(e){}
+document.getElementById('start').addEventListener('click',render);
+ageInput.addEventListener('keydown',e=>{if(e.key==='Enter')render()});lifeInput.addEventListener('keydown',e=>{if(e.key==='Enter')render()});
+if(ageInput.value)render();
+</script>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+
+</body></html>
