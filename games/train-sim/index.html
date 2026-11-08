@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#081827"><title>海風ローカル線 — 運転シミュレーター</title>
+<style>
+:root{color-scheme:dark;--bg:#071522;--panel:#10283a;--line:#28506a;--text:#ecf7ff;--muted:#9ab8cc;--cyan:#72e5e8;--gold:#ffd18a;--red:#ff8c85}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#1f5671 0,transparent 48%),var(--bg);color:var(--text);font-family:system-ui,"Yu Gothic",sans-serif}
+.wrap{width:min(1080px,calc(100% - 24px));margin:auto;padding:18px 0 32px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{font-size:12px;font-weight:900;letter-spacing:.18em;color:var(--cyan)}.small{font-size:10px;color:var(--muted)}
+h1{font-size:clamp(24px,4vw,38px);margin:5px 0 6px;letter-spacing:-.04em}.lead{font-size:12px;color:var(--muted);line-height:1.8;margin:0}
+.pill{border:1px solid var(--line);border-radius:99px;padding:7px 11px;color:var(--cyan);font-size:10px;white-space:nowrap}
+.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;margin-top:16px}
+.panel{background:linear-gradient(145deg,#122d42,#0c1e2d);border:1px solid var(--line);border-radius:19px;padding:16px;min-width:0;box-shadow:0 16px 40px #0003}
+.scene{position:relative;overflow:hidden;border-radius:14px;background:#8ac9dc;aspect-ratio:16/8.4;min-height:200px}
+canvas{display:block;width:100%;height:100%}
+.sceneHud{position:absolute;left:12px;top:12px;display:flex;gap:7px;flex-wrap:wrap}.hud{background:#071522d9;border:1px solid #ffffff30;border-radius:9px;padding:7px 9px;font-size:10px;color:#d9f3ff}
+.route{display:flex;align-items:center;gap:8px;margin:15px 0 8px}.routeLine{height:4px;border-radius:99px;background:linear-gradient(90deg,var(--cyan),#375c70);flex:1;position:relative}.routeLine:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--gold);right:-2px;top:-2.5px;box-shadow:0 0 12px var(--gold)}
+.station{font-size:11px;font-weight:800}.station small{display:block;color:var(--muted);font-size:9px;font-weight:500}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.metric{background:#081b29;border:1px solid #24465d;border-radius:12px;padding:10px}.metric span{display:block;color:var(--muted);font-size:9px}.metric strong{font-size:clamp(20px,3vw,28px);font-variant-numeric:tabular-nums}.metric em{font-style:normal;font-size:10px;color:var(--muted)}
+.controls{display:grid;gap:13px}.control{background:#081b29;border:1px solid #24465d;border-radius:13px;padding:12px}.controlTop{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800}.controlTop output{color:var(--gold);font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:var(--cyan);margin:12px 0 3px;touch-action:pan-y}
+.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:11px;padding:12px 14px;font-weight:900;font-size:11px;background:var(--cyan);color:#06202a}.btn.alt{background:#203e54;color:var(--text);border:1px solid #38627d}.btn.warn{background:#5c3436;color:#ffe4db}
+.status{font-size:11px;line-height:1.75;color:#d4e9f4;background:#071b29;border-radius:12px;padding:12px;border:1px solid #24465d;min-height:68px}
+.hint{color:var(--muted);font-size:10px;line-height:1.7}.score{color:var(--gold);font-weight:900}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.scene{min-height:170px}.controls{grid-template-columns:1fr 1fr}.status,.buttons{grid-column:1/-1}}
+@media(max-width:440px){.controls{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.panel{padding:12px}}
+</style>
+</head>
+<body><div class="wrap">
+<header><div><div class="brand">SEABREEZE RAILWAYS <span class="small">/ ARCADE SIMULATION</span></div><h1>海風ローカル線</h1><p class="lead">のどかな海沿いの架空路線を運転しよう。駅の手前で速度を落として、ホームの停止位置を目指そう！</p></div><span class="pill">FICTIONAL ROUTE</span></header>
+<div class="grid">
+<section class="panel">
+  <div class="scene"><canvas id="view" width="900" height="470" aria-label="列車の運転席から見える景色"></canvas><div class="sceneHud"><span class="hud" id="signal">信号：青</span><span class="hud" id="phase">出発待ち</span></div></div>
+  <div class="route"><div class="station"><span id="fromName">港町</span><small>出発</small></div><div class="routeLine"></div><div class="station"><span id="toName">青浜</span><small>次の駅</small></div></div>
+  <div class="metrics">
+    <div class="metric"><span>速度</span><strong id="speed">0</strong><em> km/h</em></div>
+    <div class="metric"><span>次駅まで</span><strong id="distance">560</strong><em> m</em></div>
+    <div class="metric"><span>運転スコア</span><strong id="score">0</strong><em> pt</em></div>
+  </div>
+</section>
+<aside class="panel">
+  <div class="controls">
+    <div class="control"><div class="controlTop"><label for="throttle">力行（加速）</label><output id="throttleVal">0%</output></div><input id="throttle" type="range" min="0" max="100" value="0"><div class="small">上げるほど速度が上がる</div></div>
+    <div class="control"><div class="controlTop"><label for="brake">ブレーキ</label><output id="brakeVal">0%</output></div><input id="brake" type="range" min="0" max="100" value="0"><div class="small">駅が近づいたら少しずつ強めよう</div></div>
+    <div class="status" id="message">「運転スタート」を押して出発！ 目標は駅の停止位置で速度 0 km/h にすること。</div>
+    <div class="buttons"><button class="btn" id="start">運転スタート</button><button class="btn alt" id="pause">一時停止</button><button class="btn warn" id="reset">最初から</button></div>
+    <div class="hint">操作：スライダーで加速・減速。キーボードの W / S でも操作できるで。これは実際の鉄道設備・運転手順を再現したものではない、架空路線のゲームやで。</div>
+  </div>
+</aside>
+</div>
+</div>
+<script>
+const canvas=document.getElementById("view"),ctx=canvas.getContext("2d");
+const $=id=>document.getElementById(id);
+const stops=["青浜","森の丘","夕凪"];
+let active=false,started=false,speed=0,remaining=560,score=0,stopIndex=0,last=0,travel=0,phase="ready",resultTimer=null;
+const throttle=$("throttle"),brake=$("brake");
+function setMessage(t){$("message").textContent=t}
+function reset(){active=false;started=false;speed=0;remaining=560;score=0;stopIndex=0;travel=0;phase="ready";throttle.value=0;brake.value=0;update();setMessage("「運転スタート」を押して出発！ 目標は駅の停止位置で速度 0 km/h にすること。")}
+function start(){if(stopIndex>=stops.length)reset();active=true;started=true;phase="run";setMessage("発車！ 力行を調整して走ろう。駅まで200mを切ったらブレーキの準備やで。")}
+function next(){if(stopIndex>=stops.length){active=false;phase="done";setMessage("全駅に到着！ 合計スコア "+score+" pt。安全運転おつかれさま！");$("start").textContent="もう一度遊ぶ";return;}remaining=560;speed=0;travel=0;phase="run";active=true;$("fromName").textContent=stopIndex===0?"港町":stops[stopIndex-1];$("toName").textContent=stops[stopIndex];setMessage(stops[stopIndex]+"に向けて出発！ 停止位置を狙おう。")}
+function finishStop(){active=false;throttle.value=0;brake.value=0;let pts=0;if(speed<=3.5){pts=Math.max(20,Math.round(120-Math.abs(speed)*20));setMessage("ぴったり停車！ "+stops[stopIndex]+" に到着。 +"+pts+" pt。次の区間へ進もう。")}else{setMessage("通過してしまった！ 次は駅の手前からブレーキを使ってみよう。 +0 pt。");}score+=pts;stopIndex++;phase="stopped";$("start").textContent=stopIndex>=stops.length?"結果を見る":"次の区間へ";update()}
+function update(){ $("speed").textContent=speed.toFixed(0);$("distance").textContent=Math.max(0,remaining).toFixed(0);$("score").textContent=score;$("throttleVal").textContent=throttle.value+"%";$("brakeVal").textContent=brake.value+"%";$("fromName").textContent=stopIndex===0?"港町":stops[Math.min(stopIndex-1,2)];$("toName").textContent=stops[Math.min(stopIndex,2)]||"終点";$("phase").textContent=phase==="run"?(remaining<200?"駅接近中":"走行中"):phase==="stopped"?"停車":phase==="ready"?"出発待ち":"運転終了";$("signal").textContent="信号："+(remaining<200?"注意":"青")}
+function tick(ts){if(!last)last=ts;let dt=Math.min(.05,(ts-last)/1000);last=ts;if(active){const t=Number(throttle.value)/100,b=Number(brake.value)/100;let accel=t*4.2-b*10-(t===0&&b===0?.12:0);speed=Math.max(0,Math.min(72,speed+accel*dt));let delta=speed/3.6*dt;remaining-=delta;if(remaining<=0){remaining=0;finishStop();}}draw(ts);update();requestAnimationFrame(tick)}
+function draw(ts){const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);let sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,"#81c3d8");sky.addColorStop(.63,"#d6e6d9");sky.addColorStop(1,"#477a68");ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);ctx.fillStyle="#5f9c8d";ctx.beginPath();ctx.moveTo(0,245);ctx.quadraticCurveTo(130,170,260,244);ctx.quadraticCurveTo(390,170,510,235);ctx.quadraticCurveTo(690,140,900,250);ctx.lineTo(900,330);ctx.lineTo(0,330);ctx.fill();ctx.fillStyle="#e0cb9c";ctx.fillRect(0,295,900,28);ctx.fillStyle="#5f967c";ctx.fillRect(0,318,900,18);
+ctx.fillStyle="#334b55";ctx.beginPath();ctx.moveTo(0,470);ctx.lineTo(365,310);ctx.lineTo(535,310);ctx.lineTo(900,470);ctx.fill();ctx.strokeStyle="#d5d7cf";ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(60,470);ctx.lineTo(420,310);ctx.moveTo(840,470);ctx.lineTo(480,310);ctx.stroke();
+let offset=(travel*8)%44;for(let y=315;y<470;y+=26){let p=(y-310)/160;let half=85+ p*330;let x=450-half;ctx.strokeStyle="#c1a77b";ctx.lineWidth=2+p*4;ctx.beginPath();ctx.moveTo(x,y+offset*p);ctx.lineTo(900-x,y+offset*p);ctx.stroke();}
+for(let i=0;i<5;i++){let x=80+i*190-(travel*2.4%190);ctx.strokeStyle="#385e65";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,100);ctx.lineTo(x,300);ctx.stroke();ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-32,122);ctx.lineTo(x+32,122);ctx.stroke();}
+ctx.fillStyle="#fff";ctx.font="bold 15px system-ui";ctx.fillText(remaining<200?"まもなく "+(stops[stopIndex]||"終点"):"海風ローカル線",22,40);ctx.fillStyle="#102d3c";ctx.font="12px system-ui";ctx.fillText("架空路線 / ARCADE SIM",22,60);
+}
+throttle.addEventListener("input",update);brake.addEventListener("input",update);
+$("start").addEventListener("click",()=>{if(!started){start();$("start").textContent="運転中";}else if(phase==="stopped"){if(stopIndex>=stops.length){reset();start()}else next();$("start").textContent="運転中";}else if(!active){start();}});
+$("pause").addEventListener("click",()=>{active=false;throttle.value=0;phase="paused";setMessage("一時停止中。再開するときは「運転スタート」を押してな。");update()});
+$("reset").addEventListener("click",reset);
+document.addEventListener("keydown",e=>{if(e.repeat)return;if(e.key.toLowerCase()==="w")throttle.value=Math.min(100,Number(throttle.value)+10);if(e.key.toLowerCase()==="s")brake.value=Math.min(100,Number(brake.value)+10);update()});
+document.addEventListener("keyup",e=>{if(e.key.toLowerCase()==="w")throttle.value=0;if(e.key.toLowerCase()==="s")brake.value=0;update()});
+reset();requestAnimationFrame(tick);
+</script></body></html>

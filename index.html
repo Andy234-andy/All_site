@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090d19">
-<meta name="description" content="Andyが作ったゲーム、Webアプリ、実験プロジェクトをひとつにまとめた作品ポータル。">
-<title>ANDY'S WORLD — 作品ポータル</title>
+<meta name="description" content="あっくんが作ったゲーム、Webアプリ、実験プロジェクトをひとつにまとめた作品ポータル。">
+<title>あっくんの作品ポータル</title>
 <style>
 :root{color-scheme:dark;--bg:#080c17;--panel:#111a2b;--panel2:#17233a;--line:#273653;--text:#eef3ff;--muted:#9aabc7;--cyan:#61e7dd;--violet:#a993ff;--pink:#ff8fbd;--gold:#ffd579;--green:#a7edbd}
 *{box-sizing:border-box}
@@ -80,7 +80,7 @@ footer a{color:#a9c9dc;text-decoration:none}
 <body>
 <div class="wrap">
 <header>
-  <div class="brand"><div class="brand-icon">A</div><div>ANDY'S WORLD<br><span style="font-size:9px;color:#8294b2;font-weight:600;letter-spacing:.2em">PROJECT COLLECTION</span></div></div>
+  <div class="brand"><div class="brand-icon">✦</div><div>あっくんの作品集<br><span style="font-size:9px;color:#8294b2;font-weight:600;letter-spacing:.2em">PROJECT COLLECTION</span></div></div>
   <div class="header-note">GAMES · WEB APPS · EXPERIMENTS</div>
 </header>
 <main>
@@ -115,20 +115,23 @@ footer a{color:#a9c9dc;text-decoration:none}
   <div class="notice">
     <strong>作品について：</strong> Focus Flow AI と FOCUS LAB の表示値は、カメラ等から得られる信号を使った実験的な目安で、集中力や能力を科学的に判定するものではありません。カメラ機能を使う場合は、各アプリ内の説明とブラウザの権限表示を確認してな。
     <br><br>
-    <strong>復旧メモ：</strong> 旧 ATSUKI ARCADE は公開ページを確認できた一方、ゲーム一覧APIが空の状態やったので「復旧待ち」として掲載。ゲームを新しい場所に追加していくための拠点として、このポータルを使っていくで。
+    <strong>復旧メモ：</strong> 旧アーケードは保存用ページに切り替え、現在遊べる作品はこのポータル内にまとめ直しているで。
   </div>
 </main>
 <footer>
-  <span>© Andy · Made with curiosity and code.</span>
+  <span>© 2026 あっくんの作品集 · Made with curiosity and code.</span>
   <span><a href="https://github.com/Andy234-andy/All_site" target="_blank" rel="noopener">GitHub repository</a></span>
 </footer>
 </div>
 <script>
 const projects = [
   {id:"egg",name:"たくさんの卵の中からハゲを見つける",kind:"game",kindLabel:"BROWSER GAME",status:"live",statusLabel:"公開中",emoji:"🥚",cover:"game",desc:"たくさんの卵の中から目的のキャラクターを探すタイムアタック。コンボとレア図鑑もあるで！",tags:["タイムアタック","さがしもの","コンボ"],url:"/games/egg-hage/index.html",button:"ゲームを開く",primary:true},
-  {id:"fighter",name:"Andy Fighter Arena",kind:"game",kindLabel:"BROWSER GAME",status:"live",statusLabel:"公開中",emoji:"🥊",cover:"game",desc:"オリジナルファイターで戦うブラウザ格闘ゲーム。",tags:["アクション","格闘"],url:"/games/fighter-arena/index.html",button:"アリーナへ",primary:true},
+  {id:"fighter",name:"Fighter Arena",kind:"game",kindLabel:"BROWSER GAME",status:"live",statusLabel:"公開中",emoji:"🥊",cover:"game",desc:"オリジナルファイターで戦うブラウザ格闘ゲーム。",tags:["アクション","格闘"],url:"/games/fighter-arena/index.html",button:"アリーナへ",primary:true},
   {id:"3n",name:"3n Logic",kind:"game",kindLabel:"PLAY IN THIS SITE",status:"live",statusLabel:"このサイトで遊べる",emoji:"➗",cover:"lab",desc:"数字を見て、3の倍数かどうかを瞬時に判定するゲーム。EASY・NORMAL・HARDの3段階。",tags:["数学","反射神経","1〜10,000"],url:"/games/3n-logic.html",button:"今すぐ遊ぶ",primary:true},
-  {id:"arcade",name:"ATSUKI ARCADE",kind:"archive",kindLabel:"LEGACY GAME HUB",status:"repair",statusLabel:"復旧待ち",emoji:"🕹️",cover:"archive",desc:"以前作った自作ゲームのゲームセンター。旧版の公開ページは残っているけど、現在のゲーム一覧APIは空のため復旧対象。",tags:["旧ゲームセンター","旧版"],url:"https://pause-lab.vercel.app",button:"旧版を開く",primary:false},
+  {id:"train-sim",name:"海風ローカル線 — 運転シミュレーター",kind:"game",kindLabel:"TRAIN SIMULATOR",status:"live",statusLabel:"新作",emoji:"🚃",cover:"game",desc:"海沿いの架空路線を運転。速度を調整して、駅の停止位置を狙おう！",tags:["電車","運転ゲーム","停車チャレンジ"],url:"/games/train-sim/index.html",button:"運転する",primary:true},
+  {id:"ramen-lab",name:"RAMEN STUDIO — ラーメン作り",kind:"game",kindLabel:"COOKING SIMULATOR",status:"live",statusLabel:"新作",emoji:"🍜",cover:"game",desc:"スープ・タレ・麺・トッピングを自由に組み合わせて、理想の一杯を完成させよう。",tags:["料理","カスタム","ラーメン"],url:"/games/ramen-lab/index.html",button:"ラーメンを作る",primary:true},
+  {id:"pon-lab",name:"PON! LAB — 気持ちいいミニゲーム",kind:"game",kindLabel:"SATISFYING MINI GAMES",status:"live",statusLabel:"新作",emoji:"🫧",cover:"game",desc:"泡つぶし・光の連鎖・色合わせ。短いラウンドで小さな達成感を楽しもう。",tags:["ミニゲーム","リラックス","3種類"],url:"/games/pon-lab/index.html",button:"遊んでみる",primary:true},
+  {id:"arcade",name:"旧アーケード",kind:"archive",kindLabel:"LEGACY GAME HUB",status:"repair",statusLabel:"復旧待ち",emoji:"🕹️",cover:"archive",desc:"以前作った自作ゲームのゲームセンター。旧版の公開ページは残っているけど、ゲーム一覧データが読み込めないため、保存用ページとして掲載。",tags:["旧ゲームセンター","旧版"],url:"https://pause-lab.vercel.app",button:"旧版を開く",primary:false},
   {id:"focus-flow",name:"Focus Flow AI v8.0",kind:"tool",kindLabel:"WEB APP",status:"live",statusLabel:"公開中",emoji:"🌊",cover:"tool",desc:"作業中の視線・顔の動きなどの信号を探究する、実験的なフォーカス分析ツール。",tags:["AI実験","MediaPipe","フォーカス"],url:"/apps/focus-flow-ai/index.html",button:"ツールを開く",primary:true},
   {id:"focus-lab",name:"FOCUS LAB",kind:"tool",kindLabel:"WEB APP",status:"live",statusLabel:"公開中",emoji:"🎯",cover:"tool",desc:"カメラの視覚サインを使ったライブダッシュボード。セッションの推移や履歴を確認できる。",tags:["カメラ","分析","セッション"],url:"/apps/focus-lab/index.html",button:"ツールを開く",primary:true},
   {id:"hourglass",name:"命の砂時計",kind:"tool",kindLabel:"WEB APP",status:"live",statusLabel:"公開中",emoji:"⌛",cover:"tool",desc:"時間の有限さを見つめ、今日を大切にするきっかけを作るWebアプリ。",tags:["時間","ライフ"],url:"/apps/life-hourglass/index.html",button:"アプリを開く",primary:true},

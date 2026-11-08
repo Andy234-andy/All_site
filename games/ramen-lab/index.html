@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#21130f">
+<title>RAMEN STUDIO — ラーメン作りシミュレーター</title>
+<style>
+:root{color-scheme:dark;--bg:#180f0d;--panel:#2b1b17;--line:#674032;--text:#fff2e6;--muted:#c5a99a;--orange:#ffb65f;--red:#f0785e;--cream:#ffe0ad}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#6b3524 0,transparent 52%),var(--bg);font-family:system-ui,"Yu Gothic",sans-serif;color:var(--text)}
+.wrap{max-width:1020px;width:calc(100% - 24px);margin:auto;padding:20px 0 40px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{font-weight:900;letter-spacing:.2em;font-size:11px;color:var(--orange)}.pill{border:1px solid var(--line);border-radius:99px;padding:7px 11px;font-size:10px;color:var(--cream)}
+h1{font-size:clamp(29px,5vw,46px);margin:11px 0 4px;letter-spacing:-.06em}.lead{font-size:12px;color:var(--muted);line-height:1.8;margin:0}
+.layout{display:grid;grid-template-columns:1fr .88fr;gap:14px;margin-top:18px}.panel{background:linear-gradient(145deg,#39221b,#251612);border:1px solid var(--line);border-radius:19px;padding:17px;min-width:0}
+.panel h2{font-size:14px;margin:0 0 14px}.step{font-size:10px;color:var(--orange);letter-spacing:.15em;font-weight:900;margin-bottom:5px}
+.group{margin:0 0 18px}.group label{display:block;font-weight:800;font-size:12px;margin-bottom:8px}
+.options{display:flex;gap:7px;flex-wrap:wrap}.choice{border:1px solid #76503e;border-radius:11px;background:#1e120f;color:var(--text);padding:9px 11px;font-size:11px;font-weight:700}.choice.active{background:var(--orange);border-color:var(--orange);color:#29170e;box-shadow:0 0 0 2px #ffb65f25}
+.sliderRow{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}input[type=range]{width:100%;accent-color:var(--orange)}
+.toppings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.top{display:flex;align-items:center;gap:8px;border:1px solid #76503e;background:#1e120f;border-radius:10px;padding:9px;font-size:11px}.top input{accent-color:var(--orange)}
+.bowl{position:relative;display:grid;place-items:center;min-height:250px;border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at 50% 90%,#5a2b1d,#231512 65%)}.bowl:before{content:"";position:absolute;width:225px;height:150px;border-radius:50%;background:linear-gradient(#fff1d4,#d7b38b);box-shadow:0 17px 0 #9c6549,0 25px 40px #0009;top:49%;left:50%;transform:translate(-50%,-50%)}.soup{position:absolute;width:180px;height:115px;top:39%;left:50%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(ellipse,#e9b66c,#8b4927);box-shadow:inset 0 0 15px #713a24}
+.noodles{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);width:130px;height:70px;border-radius:50%;background:repeating-radial-gradient(ellipse at 45% 45%,transparent 0 5px,#f7db9b 6px 8px,transparent 9px 13px);opacity:.85}
+.garnish{position:absolute;top:27%;left:50%;transform:translateX(-50%);font-size:34px;filter:drop-shadow(0 4px 3px #0006)}
+.bowlLabel{position:absolute;bottom:10px;font-size:9px;letter-spacing:.2em;color:#f4d8bd}
+.progress{height:8px;border-radius:99px;background:#170d0b;overflow:hidden;margin:10px 0}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--orange));transition:width .2s}
+.btn{border:0;border-radius:12px;padding:12px 15px;background:linear-gradient(100deg,var(--orange),#ff8c61);color:#2d160d;font-weight:900;font-size:11px;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.secondary{background:#4b3027;color:var(--text);border:1px solid #805744}
+.status{background:#1d110e;border:1px solid #654031;border-radius:12px;padding:12px;font-size:11px;line-height:1.8;color:#e9d2c0;min-height:54px}
+.result{display:none;margin-top:12px;border:1px solid var(--orange);border-radius:13px;padding:13px;background:#ffb65f10}.result.show{display:block}.stars{font-size:23px;color:var(--orange);letter-spacing:3px}.review{font-size:11px;color:var(--muted);line-height:1.8}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.bowl{min-height:230px}}
+</style></head><body><div class="wrap">
+<header><div class="brand">RAMEN STUDIO <span style="color:var(--muted);font-weight:500">/ COOKING GAME</span></div><span class="pill">YOUR LITTLE RAMEN SHOP</span></header>
+<h1>理想の一杯、つくろう。</h1><p class="lead">スープ、タレ、麺、トッピングを選んで、あなただけのラーメンを完成させよう！組み合わせで評価が変わるで。</p>
+<div class="layout">
+<section class="panel">
+<div class="step">01 / SOUP & TARE</div>
+<div class="group"><label>スープを選ぶ</label><div class="options" data-group="soup"><button class="choice active" data-value="鶏白湯">🐓 鶏白湯</button><button class="choice" data-value="豚骨">🍖 豚骨</button><button class="choice" data-value="魚介">🐟 魚介</button><button class="choice" data-value="野菜">🥬 野菜</button></div></div>
+<div class="group"><label>タレを選ぶ</label><div class="options" data-group="tare"><button class="choice active" data-value="醤油">醤油</button><button class="choice" data-value="味噌">味噌</button><button class="choice" data-value="塩">塩</button><button class="choice" data-value="辛味噌">辛味噌</button></div></div>
+<div class="step">02 / NOODLES</div>
+<div class="group"><label>麺の太さ</label><div class="options" data-group="noodle"><button class="choice" data-value="細麺">細麺</button><button class="choice active" data-value="中太麺">中太麺</button><button class="choice" data-value="太麺">太麺</button></div></div>
+<div class="group"><label>麺のかたさ</label><div class="options" data-group="hardness"><button class="choice" data-value="かため">かため</button><button class="choice active" data-value="ふつう">ふつう</button><button class="choice" data-value="やわらかめ">やわらかめ</button></div></div>
+<div class="step">03 / TOPPINGS</div>
+<div class="group"><label>トッピングを追加</label><div class="toppings">
+<label class="top"><input type="checkbox" value="チャーシュー" checked> 🥩 チャーシュー</label>
+<label class="top"><input type="checkbox" value="煮卵" checked> 🥚 煮卵</label>
+<label class="top"><input type="checkbox" value="ねぎ" checked> 🧅 ねぎ</label>
+<label class="top"><input type="checkbox" value="海苔"> 🌿 海苔</label>
+<label class="top"><input type="checkbox" value="メンマ"> 🎋 メンマ</label>
+<label class="top"><input type="checkbox" value="コーン"> 🌽 コーン</label>
+<label class="top"><input type="checkbox" value="バター"> 🧈 バター</label>
+<label class="top"><input type="checkbox" value="辛味"> 🌶️ 辛味</label>
+</div></div>
+<div class="group"><div class="sliderRow"><label for="richness">スープの濃さ</label><output id="richnessVal">70%</output></div><input id="richness" type="range" min="20" max="100" value="70"></div>
+<div class="step">04 / BOIL & SERVE</div>
+<div class="progress"><span id="cookProgress"></span></div>
+<div class="buttons" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="boil">麺をゆでる</button><button class="btn secondary" id="serve" disabled>盛り付けて完成</button></div>
+</section>
+<aside class="panel">
+<h2>🍜 できあがりプレビュー</h2>
+<div class="bowl"><div class="soup"></div><div class="noodles"></div><div class="garnish" id="garnish">🥚 🧅</div><div class="bowlLabel">RAMEN / PREVIEW</div></div>
+<div class="status" id="status" style="margin-top:12px">まずはスープとタレを選ぼう。組み合わせを考えるのも料理の楽しみ！</div>
+<div class="result" id="result"><div class="stars" id="stars">★★★★★</div><strong id="rating">最高の一杯！</strong><p class="review" id="review"></p><button class="btn secondary" id="again">もう一杯つくる</button></div>
+<p class="hint" style="font-size:10px;color:var(--muted);line-height:1.8;margin-top:12px">これは料理の雰囲気を楽しむゲームやで。実際の調理手順・衛生基準を示すものではありません。</p>
+</aside></div></div>
+<script>
+const state={soup:"鶏白湯",tare:"醤油",noodle:"中太麺",hardness:"ふつう",richness:70,cooked:false,seconds:0};
+document.querySelectorAll(".options").forEach(group=>group.addEventListener("click",e=>{const b=e.target.closest("button.choice");if(!b)return;group.querySelectorAll(".choice").forEach(x=>x.classList.remove("active"));b.classList.add("active");state[group.dataset.group]=b.dataset.value;updatePreview()}));
+document.querySelectorAll(".toppings input").forEach(x=>x.addEventListener("change",updatePreview));
+document.getElementById("richness").addEventListener("input",e=>{state.richness=Number(e.target.value);document.getElementById("richnessVal").textContent=state.richness+"%";});
+function toppings(){return [...document.querySelectorAll(".toppings input:checked")].map(x=>x.value)}
+function updatePreview(){const t=toppings();document.getElementById("garnish").textContent=t.length?t.map(x=>({チャーシュー:"🥩",煮卵:"🥚",ねぎ:"🧅",海苔:"🌿",メンマ:"🎋",コーン:"🌽",バター:"🧈",辛味:"🌶️"}[x])).slice(0,5).join(" "):"✨"}
+let cookTimer=null;
+document.getElementById("boil").addEventListener("click",()=>{if(cookTimer)return;state.seconds=0;state.cooked=false;document.getElementById("serve").disabled=true;document.getElementById("status").textContent="麺をゆでてるで…ちょうどいいタイミングを待とう！";cookTimer=setInterval(()=>{state.seconds++;document.getElementById("cookProgress").style.width=Math.min(100,state.seconds/6*100)+"%";if(state.seconds>=6){clearInterval(cookTimer);cookTimer=null;state.cooked=true;document.getElementById("serve").disabled=false;document.getElementById("status").textContent="麺がゆで上がった！スープと合わせて盛り付けよう。";}},1000)});
+document.getElementById("serve").addEventListener("click",()=>{if(!state.cooked)return;const t=toppings();let pts=60;const pairs={"鶏白湯":"塩","豚骨":"醤油","魚介":"醤油","野菜":"味噌"};if(pairs[state.soup]===state.tare)pts+=14;if(t.length>=3&&t.length<=5)pts+=12;else if(t.length>6)pts+=5;else pts+=t.length*2;if(state.richness>=50&&state.richness<=85)pts+=8;if(state.seconds===6)pts+=6;pts=Math.min(100,pts);const stars=Math.max(1,Math.min(5,Math.ceil(pts/20)));document.getElementById("stars").textContent="★".repeat(stars)+"☆".repeat(5-stars);document.getElementById("rating").textContent=pts>=90?"名店級の一杯！":pts>=75?"かなりおいしそう！":pts>=60?"いい感じの一杯！":"次は組み合わせを変えてみよう";document.getElementById("review").textContent=state.soup+"スープ × "+state.tare+"ダレ、"+state.noodle+"・"+state.hardness+"。トッピング："+(t.join("、")||"なし")+"。完成度 "+pts+"/100";document.getElementById("result").classList.add("show");document.getElementById("status").textContent="ラーメン完成！ "+pts+" 点やで。";});
+document.getElementById("again").addEventListener("click",()=>{state.cooked=false;state.seconds=0;document.getElementById("cookProgress").style.width="0";document.getElementById("serve").disabled=true;document.getElementById("result").classList.remove("show");document.getElementById("status").textContent="次の一杯を考えよう！"});
+updatePreview();
+</script></body></html>

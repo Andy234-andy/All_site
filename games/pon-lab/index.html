@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101027">
+<title>PON! LAB — 気持ちいいミニゲーム</title>
+<style>
+:root{color-scheme:dark;--bg:#0c0b1c;--panel:#17162d;--line:#35325b;--text:#f5f3ff;--muted:#aaa6c8;--cyan:#78e8e5;--pink:#ff8bc2;--yellow:#ffd977;--violet:#b69aff;--green:#a7f0b7}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#3c286c 0,transparent 48%),var(--bg);color:var(--text);font-family:system-ui,"Yu Gothic",sans-serif}
+.wrap{width:min(980px,calc(100% - 24px));margin:auto;padding:22px 0 38px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:11px;letter-spacing:.22em;font-weight:1000;color:var(--cyan)}.chip{border:1px solid var(--line);border-radius:99px;padding:7px 10px;font-size:9px;color:var(--muted)}
+h1{font-size:clamp(30px,5vw,50px);letter-spacing:-.06em;margin:12px 0 4px}.lead{font-size:12px;line-height:1.8;color:var(--muted);margin:0;max-width:650px}
+main{margin-top:18px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tab{border:1px solid var(--line);border-radius:12px;padding:11px 14px;background:#15142a;color:var(--muted);font-weight:850;font-size:11px}.tab.active{background:var(--cyan);border-color:var(--cyan);color:#101c2b}
+.panel{border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#1b1935,#111125);padding:17px;box-shadow:0 18px 50px #0004}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}.head h2{font-size:16px;margin:0}.muted{font-size:10px;color:var(--muted)}
+.bubbles{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;max-width:700px;margin:12px auto}
+.bubble{aspect-ratio:1;border:1px solid #a7b8ff65;border-radius:50%;background:radial-gradient(circle at 32% 25%,#fff9 0 5%,#d7c8ff 7%,#8f80d9 48%,#51488f 100%);box-shadow:inset -5px -7px 12px #32275c66,0 4px 9px #0005;cursor:pointer;transition:transform .13s,opacity .2s;padding:0;touch-action:manipulation}
+.bubble:active{transform:scale(.82)}.bubble.popped{transform:scale(.25);opacity:0;pointer-events:none}
+.chainField{position:relative;height:360px;overflow:hidden;border:1px solid #343052;border-radius:15px;background:radial-gradient(circle at 50% 50%,#27204a,#111126)}
+.orb{position:absolute;width:36px;height:36px;border-radius:50%;border:1px solid #fff8;background:radial-gradient(circle at 32% 25%,#fff,#7fe7e5 24%,#268b9a 82%);box-shadow:0 0 18px #65e8eb70;transform:translate(-50%,-50%);cursor:pointer;transition:transform .22s,opacity .22s}
+.orb.popped{transform:translate(-50%,-50%) scale(2.4);opacity:0;pointer-events:none}
+.orb:after{content:"";position:absolute;inset:-8px;border:2px solid #8fffff;border-radius:50%;opacity:0}
+.orb.popped:after{animation:ring .45s ease-out}
+@keyframes ring{0%{transform:scale(.2);opacity:.9}100%{transform:scale(2);opacity:0}}
+.matchArea{border-radius:16px;padding:22px;background:#111126;border:1px solid #343052;text-align:center}
+.target{font-size:12px;color:var(--muted);margin-bottom:10px}.targetColor{font-size:26px;font-weight:1000;letter-spacing:.08em;margin-bottom:17px}
+.colorGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:540px;margin:auto}
+.colorBtn{height:100px;border:2px solid #ffffff35;border-radius:16px;cursor:pointer;box-shadow:0 9px 19px #0005;transition:transform .15s,filter .15s}.colorBtn:hover{transform:translateY(-3px);filter:brightness(1.15)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.btn{border:0;border-radius:11px;padding:11px 15px;background:var(--cyan);color:#10202b;font-weight:950;font-size:11px;cursor:pointer}.btn.secondary{background:#272441;border:1px solid #4a456f;color:var(--text)}
+.statrow{display:flex;gap:8px;flex-wrap:wrap}.stat{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#100f22;font-size:10px;color:var(--muted)}.stat strong{color:var(--text);font-size:15px;margin-left:5px}
+.finish{display:none;text-align:center;padding:25px;border:1px solid #66558e;border-radius:15px;background:#241d40;margin-top:12px}.finish.show{display:block}.finish b{font-size:18px;color:var(--yellow)}
+.footnote{margin-top:14px;color:#9995b5;font-size:10px;line-height:1.8}.access{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted)}
+@media(max-width:560px){.bubbles{gap:5px}.panel{padding:12px}.colorGrid{gap:7px}.colorBtn{height:72px}.chainField{height:300px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style></head><body><div class="wrap">
+<header><div class="brand">PON! LAB <span style="font-weight:500;color:#aaa6c8">/ SATISFYING MINI GAMES</span></div><span class="chip">3 SHORT ACTIVITIES</span></header>
+<h1>ぽんっ！すっきり！</h1><p class="lead">泡をつぶす、光をつなぐ、色をそろえる。小さな達成感を楽しむミニゲーム集。どれも一区切りで終われるシンプル設計やで。</p>
+<main><nav class="tabs" aria-label="ゲーム選択">
+<button class="tab active" data-tab="bubble">🫧 Bubble Pop</button><button class="tab" data-tab="chain">✨ Chain Lights</button><button class="tab" data-tab="color">🎨 Color Match</button>
+</nav>
+<section class="panel game" id="bubble">
+<div class="head"><h2>🫧 Bubble Pop</h2><div class="statrow"><span class="stat">Popped <strong id="bubbleCount">0 / 40</strong></span><span class="stat">Score <strong id="bubbleScore">0</strong></span></div></div>
+<p class="muted">好きな泡をタップしてみて。全部つぶしたらこのラウンドはクリア！</p>
+<div class="bubbles" id="bubbleBoard"></div><div class="finish" id="bubbleFinish"><b>BOARD CLEAR!</b><p class="muted">40個ぜんぶポンッ！ いい感じにクリアできたで。</p><button class="btn secondary" id="bubbleReset">もう一枚のボード</button></div>
+</section>
+<section class="panel game" id="chain" hidden>
+<div class="head"><h2>✨ Chain Lights</h2><div class="statrow"><span class="stat">Lights <strong id="chainCount">0 / 18</strong></span><span class="stat">Score <strong id="chainScore">0</strong></span></div></div>
+<p class="muted">光をひとつ押すと、近くの光へ連鎖していくよ。全部つながるかな？</p>
+<div class="chainField" id="chainField"></div><div class="finish" id="chainFinish"><b>ALL CONNECTED!</b><p class="muted">ひとつの光から、全部に広がった！</p><button class="btn secondary" id="chainReset">新しい配置</button></div>
+</section>
+<section class="panel game" id="color" hidden>
+<div class="head"><h2>🎨 Color Match</h2><div class="statrow"><span class="stat">Round <strong id="round">1 / 10</strong></span><span class="stat">Correct <strong id="correct">0</strong></span></div></div>
+<div class="matchArea"><div class="target">この色を見つけてタップ！</div><div class="targetColor" id="targetColor">AQUA</div><div class="colorGrid" id="colorGrid"></div><div class="finish" id="colorFinish"><b>10 ROUNDS DONE!</b><p class="muted" id="colorResult"></p><button class="btn secondary" id="colorReset">もう一度</button></div></div>
+</section>
+<div class="footnote">ゲームは短いラウンド制。スコアや連続記録で急かしたり、通知で呼び戻したりはしないよ。気分転換として、自分のペースで楽しんでな。</div>
+</main>
+<footer class="access"><span>✨ Sound: off</span><span>·</span><span>Reduced-motion setting supported</span><span>·</span><span>Play at your pace</span></footer>
+</div>
+<script>
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");document.querySelectorAll(".game").forEach(x=>x.hidden=true);document.getElementById(btn.dataset.tab).hidden=false;}));
+const board=document.getElementById("bubbleBoard");let popped=0,bubbleScore=0;
+function makeBubbles(){board.innerHTML="";popped=0;bubbleScore=0;document.getElementById("bubbleFinish").classList.remove("show");for(let i=0;i<40;i++){const b=document.createElement("button");b.className="bubble";b.type="button";b.setAttribute("aria-label","泡をつぶす");b.addEventListener("click",()=>{if(b.classList.contains("popped"))return;b.classList.add("popped");popped++;bubbleScore+=10;document.getElementById("bubbleCount").textContent=popped+" / 40";document.getElementById("bubbleScore").textContent=bubbleScore;if(popped===40)document.getElementById("bubbleFinish").classList.add("show");});board.appendChild(b);}document.getElementById("bubbleCount").textContent="0 / 40";document.getElementById("bubbleScore").textContent="0";}
+document.getElementById("bubbleReset").addEventListener("click",makeBubbles);makeBubbles();
+const field=document.getElementById("chainField");let chainPopped=0,chainPoints=0,chainNodes=[];
+function makeChain(){field.innerHTML="";chainPopped=0;chainPoints=0;chainNodes=[];document.getElementById("chainFinish").classList.remove("show");const positions=[[16,20],[38,15],[59,22],[82,16],[25,42],[48,39],[72,42],[13,68],[35,72],[58,67],[83,69],[47,88],[25,89],[69,88],[91,47],[7,46],[91,88],[50,8]];positions.forEach((pos,i)=>{const node=document.createElement("button");node.className="orb";node.style.left=pos[0]+"%";node.style.top=pos[1]+"%";node.setAttribute("aria-label","光をつなぐ");const obj={el:node,x:pos[0],y:pos[1],popped:false};chainNodes.push(obj);node.addEventListener("click",()=>{if(obj.popped)return;popNode(i)});field.appendChild(node);});updateChain();}
+function popNode(index){const queue=[index],seen=new Set();while(queue.length){const i=queue.shift();if(seen.has(i))continue;seen.add(i);const n=chainNodes[i];if(!n||n.popped)continue;n.popped=true;n.el.classList.add("popped");chainPopped++;chainPoints+=15;chainNodes.forEach((other,j)=>{if(!other.popped&&!seen.has(j)){const dx=n.x-other.x,dy=n.y-other.y;if(Math.hypot(dx,dy)<30)queue.push(j);}});}updateChain();if(chainPopped===chainNodes.length)document.getElementById("chainFinish").classList.add("show");}
+function updateChain(){document.getElementById("chainCount").textContent=chainPopped+" / 18";document.getElementById("chainScore").textContent=chainPoints;}
+document.getElementById("chainReset").addEventListener("click",makeChain);makeChain();
+const palettes=[{name:"AQUA",color:"#71e5e0"},{name:"PINK",color:"#ff85bb"},{name:"SUN",color:"#ffd46d"},{name:"VIOLET",color:"#ad94ff"}];let round=0,correct=0,target=0;
+function nextColor(){round++;if(round>10){document.getElementById("colorGrid").innerHTML="";document.getElementById("colorFinish").classList.add("show");document.getElementById("colorResult").textContent="10ラウンド中 "+correct+" 回正解！自分のペースで楽しめたかな。";return;}target=(round*3+1)%4;document.getElementById("round").textContent=round+" / 10";document.getElementById("targetColor").textContent=palettes[target].name;document.getElementById("targetColor").style.color=palettes[target].color;const choices=[0,1,2,3].sort((a,b)=>((a+round)%4)-((b+round)%4));document.getElementById("colorGrid").innerHTML="";choices.forEach((n)=>{const b=document.createElement("button");b.className="colorBtn";b.style.background=palettes[n].color;b.setAttribute("aria-label",palettes[n].name);b.addEventListener("click",()=>{if(n===target){correct++;document.getElementById("correct").textContent=correct;}nextColor();});document.getElementById("colorGrid").appendChild(b);});}
+function resetColor(){round=0;correct=0;document.getElementById("correct").textContent="0";document.getElementById("colorFinish").classList.remove("show");nextColor();}
+document.getElementById("colorReset").addEventListener("click",resetColor);resetColor();
+</script></body></html>
