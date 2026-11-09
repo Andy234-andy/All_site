@@ -1,4 +1,4 @@
-# あっくんの作品ポータル — All Sites & Games
+# Andyの作品ポータル — All Sites & Games
 
 ゲーム、Webアプリ、実験作品をまとめた作品ポータルです。
 
