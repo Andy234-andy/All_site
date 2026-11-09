@@ -16,6 +16,7 @@
 <script>
 (function(){
 'use strict';
+const PLAY_API_URL=['all-site-kappa.vercel.app','all-site-andy127.vercel.app','all-site-git-main-andy127.vercel.app','all-site-kuz1bf1e4-andy127.vercel.app'].includes(location.hostname)?'https://egg-hage-game.vercel.app/api/plays':'/api/plays';
 const app=document.getElementById('app'),toastEl=document.getElementById('toast'),KEY='egg-hage-game-v1';
 const KINDS=[
 {id:'gold',name:'黄金ピカピカハゲ',rarity:'レア',cls:'rare',points:300,color:'#ffd45e',desc:'まぶしい輝きを放つ黄金のハゲ。'},
@@ -28,9 +29,64 @@ const KINDS=[
 ];
 let data={};try{data=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){}
 const profile={best:Number(data.best)||0,collection:Array.isArray(data.collection)?data.collection:[],sound:data.sound!==false,settings:data.settings||{duration:60,difficulty:'normal'}};
-let game=null,timer=null,toastTimer=null;
+let game=null,timer=null,toastTimer=null,totalPlays=null;
 function save(){try{localStorage.setItem(KEY,JSON.stringify({best:profile.best,collection:profile.collection,sound:profile.sound,settings:profile.settings}));}catch(e){}}
 function toast(s){toastEl.textContent=s;toastEl.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove('show'),1800);}
+function updatePlayCountUI(){
+ const el=document.getElementById('totalPlays');
+ if(!el)return;
+ el.innerHTML=(totalPlays===null?'読込中':totalPlays.toLocaleString('ja-JP'))+' <small>回</small>';
+}
+async function refreshPlayCount(showError=false){
+ try{
+  const response=await fetch(PLAY_API_URL,{cache:'no-store'});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  const payload=await response.json();
+  if(!Number.isSafeInteger(payload.total)||payload.total<0)throw new Error('Invalid count');
+  totalPlays=payload.total;
+  updatePlayCountUI();
+  return true;
+ }catch(error){
+  const el=document.getElementById('totalPlays');
+  if(el&&totalPlays===null)el.textContent='取得失敗';
+  if(showError)toast('回数を取得できなかったよ。もう一度試してね');
+  console.warn('Play count request failed:',error);
+  return false;
+ }
+}
+function createPlayId(){
+ if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();
+ const bytes=new Uint8Array(16);
+ window.crypto.getRandomValues(bytes);
+ bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;
+ const hex=Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
+ return hex.slice(0,8)+'-'+hex.slice(8,12)+'-'+hex.slice(12,16)+'-'+hex.slice(16,20)+'-'+hex.slice(20);
+}
+async function recordPlayStart(){
+ const id=createPlayId();
+ let clientCounted=false;
+ for(let attempt=0;attempt<3;attempt++){
+  try{
+   const response=await fetch(PLAY_API_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({id}),
+    cache:'no-store'
+   });
+   const payload=await response.json();
+   if(!response.ok||payload.ok!==true)throw new Error(payload.error||('HTTP '+response.status));
+   if(!clientCounted){
+    clientCounted=true;
+    if(totalPlays!==null){totalPlays++;updatePlayCountUI();}
+    else await refreshPlayCount();
+   }
+   return;
+  }catch(error){
+   if(attempt===2){console.warn('Could not record play start:',error);toast('プレイ回数を記録できなかったよ。通信を確認してね');return;}
+   await new Promise(resolve=>setTimeout(resolve,500*(attempt+1)));
+  }
+ }
+}
 function tone(hz,dur){if(!profile.sound)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=hz;g.gain.setValueAtTime(.06,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur);o.onended=()=>c.close();}catch(e){}}
 function egg(kind,bald){
  const bodyPath='M50 7 C27 7 13 35 15 70 C16 98 31 113 50 113 C69 113 84 98 85 70 C87 35 73 7 50 7Z';
@@ -65,7 +121,7 @@ function egg(kind,bald){
 function home(){
  const times=[30,60,90].map(v=>'<button class="choice '+(profile.settings.duration===v?'active':'')+'" data-action="time" data-value="'+v+'"><strong>'+v+'秒</strong><span>'+(v===30?'おためし':v===60?'標準':'じっくり')+'</span></button>').join('');
  const diffs=[['easy','かんたん','20個'],['normal','ふつう','30個'],['hard','むずかしい','42個']].map(x=>'<button class="choice '+(profile.settings.difficulty===x[0]?'active':'')+'" data-action="diff" data-value="'+x[0]+'"><strong>'+x[1]+'</strong><span>'+x[2]+'</span></button>').join('');
- return '<section class="page"><div class="hero"><div class="hero-grid"><div><span class="eyebrow">🥚 FIND THE BALD EGG</span><h1>たくさんの卵の中から<br><span class="gradient">ハゲを見つける</span></h1><p class="lead">そっくりな卵たちにまぎれた、つるつる頭を探し出せ！<br>見つけるほどコンボがつながる、ひらめきタイムアタック！</p><button class="primary full" data-action="start">ゲームスタート！　▶</button></div><div class="art"><svg class="tiny l" viewBox="0 0 100 120"><ellipse cx="50" cy="65" rx="35" ry="45" fill="#fff0cf"/><path d="M19 48 Q12 31 27 26 Q28 8 43 17 Q52 1 62 17 Q80 10 78 35 Q91 39 80 54Z" fill="#69452f"/></svg><svg class="big" viewBox="0 0 100 120"><path d="M50 7 C27 7 13 35 15 70 C16 98 31 113 50 113 C69 113 84 98 85 70 C87 35 73 7 50 7Z" fill="#f1c59e" stroke="#c99c7e" stroke-width="2"/><path d="M19 64 Q11 58 13 72 Q15 83 24 82 M81 64 Q89 58 87 72 Q85 83 76 82" fill="#edb58e" stroke="#bd896a" stroke-width="2"/><path d="M45 97 Q50 93 55 97 L55 109 L45 109Z" fill="#d89e7c"/><path d="M31 108 Q50 101 69 108 L75 119 L25 119Z" fill="#a8a0c9" stroke="#8b83aa" stroke-width="2"/><ellipse cx="38" cy="34" rx="8" ry="15" fill="#fff" opacity=".43"/><path d="M32 88 Q50 98 68 88" stroke="#d49b7a" stroke-width="1.5" opacity=".45" fill="none"/></svg><svg class="tiny r" viewBox="0 0 100 120"><ellipse cx="50" cy="65" rx="35" ry="45" fill="#fff0cf"/><path d="M19 48 Q12 31 27 26 Q28 8 43 17 Q52 1 62 17 Q80 10 78 35 Q91 39 80 54Z" fill="#69452f"/></svg></div></div></div><div class="layout"><section class="panel"><h2>⚙️ ゲーム設定</h2><div class="block"><div class="label">制限時間 <small>プレイ時間を選ぼう</small></div><div class="choices">'+times+'</div></div><div class="block"><div class="label">難易度 <small>卵の数が変わるよ</small></div><div class="choices">'+diffs+'</div></div><div class="sound"><span>🔊 効果音</span><button class="toggle '+(profile.sound?'on':'')+'" data-action="sound">'+(profile.sound?'ON':'OFF')+'</button></div></section><aside class="panel side"><div><div class="kicker">YOUR BEST SCORE</div><div class="big-num">'+profile.best.toLocaleString('ja-JP')+' <small>pt</small></div><div class="note">これまでの最高スコア</div></div><div class="line"></div><div><div class="kicker">RARE COLLECTION</div><div class="big-num">'+profile.collection.length+' <small>/ '+KINDS.length+'</small></div><div class="note">レアハゲ図鑑の収集数</div><button class="secondary full" data-action="book">図鑑をひらく →</button></div><p class="tip">💡 <b>コツ：</b>髪の毛がない卵がターゲット！連続で見つけるとコンボボーナスが増えるよ。</p></aside></div></section>';
+ return '<section class="page"><div class="hero"><div class="hero-grid"><div><span class="eyebrow">🥚 FIND THE BALD EGG</span><h1>たくさんの卵の中から<br><span class="gradient">ハゲを見つける</span></h1><p class="lead">そっくりな卵たちにまぎれた、つるつる頭を探し出せ！<br>見つけるほどコンボがつながる、ひらめきタイムアタック！</p><button class="primary full" data-action="start">ゲームスタート！　▶</button></div><div class="art"><svg class="tiny l" viewBox="0 0 100 120"><ellipse cx="50" cy="65" rx="35" ry="45" fill="#fff0cf"/><path d="M19 48 Q12 31 27 26 Q28 8 43 17 Q52 1 62 17 Q80 10 78 35 Q91 39 80 54Z" fill="#69452f"/></svg><svg class="big" viewBox="0 0 100 120"><path d="M50 7 C27 7 13 35 15 70 C16 98 31 113 50 113 C69 113 84 98 85 70 C87 35 73 7 50 7Z" fill="#f1c59e" stroke="#c99c7e" stroke-width="2"/><path d="M19 64 Q11 58 13 72 Q15 83 24 82 M81 64 Q89 58 87 72 Q85 83 76 82" fill="#edb58e" stroke="#bd896a" stroke-width="2"/><path d="M45 97 Q50 93 55 97 L55 109 L45 109Z" fill="#d89e7c"/><path d="M31 108 Q50 101 69 108 L75 119 L25 119Z" fill="#a8a0c9" stroke="#8b83aa" stroke-width="2"/><ellipse cx="38" cy="34" rx="8" ry="15" fill="#fff" opacity=".43"/><path d="M32 88 Q50 98 68 88" stroke="#d49b7a" stroke-width="1.5" opacity=".45" fill="none"/></svg><svg class="tiny r" viewBox="0 0 100 120"><ellipse cx="50" cy="65" rx="35" ry="45" fill="#fff0cf"/><path d="M19 48 Q12 31 27 26 Q28 8 43 17 Q52 1 62 17 Q80 10 78 35 Q91 39 80 54Z" fill="#69452f"/></svg></div></div></div><div class="layout"><section class="panel"><h2>⚙️ ゲーム設定</h2><div class="block"><div class="label">制限時間 <small>プレイ時間を選ぼう</small></div><div class="choices">'+times+'</div></div><div class="block"><div class="label">難易度 <small>卵の数が変わるよ</small></div><div class="choices">'+diffs+'</div></div><div class="sound"><span>🔊 効果音</span><button class="toggle '+(profile.sound?'on':'')+'" data-action="sound">'+(profile.sound?'ON':'OFF')+'</button></div></section><aside class="panel side"><div><div class="kicker">TOTAL GAME STARTS</div><div class="big-num" id="totalPlays">読込中</div><div class="note">サーバー集計 · <button class="secondary" style="padding:4px 7px;font-size:10px" data-action="refresh-count">↻ 更新</button></div></div><div class="line"></div><div><div class="kicker">YOUR BEST SCORE</div><div class="big-num">'+profile.best.toLocaleString('ja-JP')+' <small>pt</small></div><div class="note">これまでの最高スコア</div></div><div class="line"></div><div><div class="kicker">RARE COLLECTION</div><div class="big-num">'+profile.collection.length+' <small>/ '+KINDS.length+'</small></div><div class="note">レアハゲ図鑑の収集数</div><button class="secondary full" data-action="book">図鑑をひらく →</button></div><p class="tip">💡 <b>コツ：</b>髪の毛がない卵がターゲット！連続で見つけるとコンボボーナスが増えるよ。</p></aside></div></section>';
 }
 function amount(){const base={easy:20,normal:30,hard:42}[profile.settings.difficulty]||30;return Math.min(72,base+Math.floor((game.stage-1)/4)*6);}
 function kind(){const r=Math.random();if(r<.003)return KINDS[6];if(r<.02)return KINDS[4+Math.floor(Math.random()*2)];if(r<.09)return KINDS[Math.floor(Math.random()*4)];return {id:'common',name:'いつものハゲ',rarity:'ノーマル',points:100};}
@@ -90,12 +146,13 @@ function bookView(){
 function helpView(){return '<section class="page"><div class="panel"><div class="bookhead"><div><h1>遊び方ガイド 💡</h1><p>ルールはかんたん、目指せハゲマスター！</p></div></div><div class="help"><div class="helpitem"><span class="helpicon">👀</span><div><b>1. ハゲを見つけよう</b><p>たくさんの卵の中から、髪の毛がないつるつる頭をタップ！正解は毎ステージ1人だけ。</p></div></div><div class="helpitem"><span class="helpicon">➡️</span><div><b>2. 次のステージへ</b><p>正解したら「次のステージへ」を押そう。制限時間がなくなるまで何度でも挑戦できるよ。</p></div></div><div class="helpitem"><span class="helpicon">🔥</span><div><b>3. コンボで大量ポイント</b><p>連続正解でコンボボーナスがアップ！間違えるとコンボがリセットされ、時間も2秒減るよ。</p></div></div><div class="helpitem"><span class="helpicon">✨</span><div><b>4. レアハゲを集めよう</b><p>まれに黄金・王冠・銀河などのレアハゲが登場。見つけると高ポイント＆図鑑に登録！</p></div></div><div class="helpitem"><span class="helpicon">🏆</span><div><b>5. ハイスコアを更新</b><p>ポイントと最高記録、図鑑の発見状況はこのブラウザに保存されるよ。</p></div></div></div><button class="primary full" data-action="home">わかった！ タイトルへ</button></div></section>';}
 function render(){if(!game){app.innerHTML=home();return;}if(game.screen==='game')app.innerHTML=gameView();else if(game.screen==='result')app.innerHTML=resultView();else if(game.screen==='book')app.innerHTML=bookView();else if(game.screen==='help')app.innerHTML=helpView();else app.innerHTML=home();}
 function next(){game.stage++;game.found=false;game.kind=kind();game.target=Math.floor(Math.random()*amount());render();}
-function start(){clearInterval(timer);const d=Number(profile.settings.duration)||60;game={screen:'game',bestBefore:profile.best,duration:d,timeLeft:d,score:0,stage:0,combo:0,maxCombo:0,foundCount:0,target:0,found:false,kind:null,lastEarned:0,newUnlocks:[]};next();timer=setInterval(tick,1000);tone(520,.1);}
+function start(){clearInterval(timer);const d=Number(profile.settings.duration)||60;game={screen:'game',bestBefore:profile.best,duration:d,timeLeft:d,score:0,stage:0,combo:0,maxCombo:0,foundCount:0,target:0,found:false,kind:null,lastEarned:0,newUnlocks:[]};recordPlayStart();next();timer=setInterval(tick,1000);tone(520,.1);}
 function tick(){if(!game||game.screen!=='game')return;game.timeLeft=Math.max(0,game.timeLeft-1);const t=document.getElementById('time'),b=document.getElementById('bar');if(t)t.textContent=game.timeLeft;if(b)b.style.width=(game.timeLeft/game.duration*100)+'%';if(game.timeLeft<=0)end();}
 function end(){clearInterval(timer);game.screen='result';if(game.score>profile.best)profile.best=game.score;save();tone(260,.2);render();}
 function hit(index,el){if(!game||game.screen!=='game'||game.found)return;if(index===game.target){game.found=true;game.combo++;game.foundCount++;game.maxCombo=Math.max(game.maxCombo,game.combo);game.lastEarned=game.kind.points+Math.min(Math.max(0,game.combo-1),12)*20;game.score+=game.lastEarned;if(game.kind.id!=='common'&&!profile.collection.includes(game.kind.id)){profile.collection.push(game.kind.id);game.newUnlocks.push(game.kind);}if(game.score>profile.best)profile.best=game.score;save();tone(game.kind.rarity==='伝説'?880:660,.16);render();}else{game.timeLeft=Math.max(0,game.timeLeft-2);game.combo=0;tone(180,.08);const c=document.getElementById('combo'),t=document.getElementById('time'),b=document.getElementById('bar');if(c)c.textContent='🔥 0';if(t)t.textContent=game.timeLeft;if(b)b.style.width=(game.timeLeft/game.duration*100)+'%';el.classList.remove('miss');void el.offsetWidth;el.classList.add('miss');toast('おしい！ -2秒　コンボリセット');if(game.timeLeft<=0)end();}}
 function share(){const s='「たくさんの卵の中からハゲを見つける」で'+game.score.toLocaleString('ja-JP')+'pt獲得！ '+game.foundCount+'人発見、最高'+game.maxCombo+'コンボ🔥 あなたも挑戦してみて！';if(navigator.share)navigator.share({title:'ハゲ発見ゲーム',text:s}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(s).then(()=>toast('結果をコピーしたよ！')).catch(()=>toast(s));else toast(s);}
-app.addEventListener('click',e=>{const eggBtn=e.target.closest('[data-egg]');if(eggBtn){hit(Number(eggBtn.dataset.egg),eggBtn);return;}const btn=e.target.closest('[data-action]');if(!btn)return;const a=btn.dataset.action;if(a==='start'||a==='retry'){start();return;}if(a==='home'){clearInterval(timer);game=null;render();return;}if(a==='book'){if(!game)game={screen:'book'};else game.screen='book';render();return;}if(a==='help'){if(!game)game={screen:'help'};else game.screen='help';render();return;}if(a==='time'){profile.settings.duration=Number(btn.dataset.value);save();app.innerHTML=home();return;}if(a==='diff'){profile.settings.difficulty=btn.dataset.value;save();app.innerHTML=home();return;}if(a==='sound'){profile.sound=!profile.sound;save();app.innerHTML=home();toast('効果音 '+(profile.sound?'ON':'OFF'));return;}if(a==='next'){if(game&&game.screen==='game')next();return;}if(a==='share')share();});
+app.addEventListener('click',e=>{const eggBtn=e.target.closest('[data-egg]');if(eggBtn){hit(Number(eggBtn.dataset.egg),eggBtn);return;}const btn=e.target.closest('[data-action]');if(!btn)return;const a=btn.dataset.action;if(a==='start'||a==='retry'){start();return;}if(a==='home'){clearInterval(timer);game=null;render();return;}if(a==='book'){if(!game)game={screen:'book'};else game.screen='book';render();return;}if(a==='help'){if(!game)game={screen:'help'};else game.screen='help';render();return;}if(a==='refresh-count'){refreshPlayCount(true);return;}if(a==='time'){profile.settings.duration=Number(btn.dataset.value);save();app.innerHTML=home();return;}if(a==='diff'){profile.settings.difficulty=btn.dataset.value;save();app.innerHTML=home();return;}if(a==='sound'){profile.sound=!profile.sound;save();app.innerHTML=home();toast('効果音 '+(profile.sound?'ON':'OFF'));return;}if(a==='next'){if(game&&game.screen==='game')next();return;}if(a==='share')share();});
 render();
+refreshPlayCount();
 })();
 </script></body></html>
