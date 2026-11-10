@@ -119,7 +119,6 @@ if(alreadyCounted){loadCommunityStats()}
 else{sendCommunityEvent("view").then(()=>{try{sessionStorage.setItem(viewSessionKey,"1")}catch(error){}}).catch(()=>loadCommunityStats())}
 setInterval(()=>{if(!document.hidden)loadCommunityStats()},15000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadCommunityStats()});
-else{sendCommunityEvent("view").then(()=>{try{sessionStorage.setItem(viewSessionKey,"1")}catch(error){}}).catch(()=>loadCommunityStats())}
 
 const lines={
 "ドズル":["いつも楽しい企画と動画をありがとうございます！これからも応援しています！","ドズルさんの挑戦する姿に元気をもらっています！これからも楽しみにしています！","これからもドズル社らしい楽しい動画を待っています！"],
