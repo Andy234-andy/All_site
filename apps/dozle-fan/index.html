@@ -22,11 +22,21 @@ section{margin:48px 0}.section-head{display:flex;justify-content:space-between;a
 .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#f4d58b;color:#282235;border-radius:999px;padding:11px 17px;font-size:11px;font-weight:900;transition:.2s;z-index:5}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:850px){.members{grid-template-columns:repeat(3,1fr)}}@media(max-width:620px){.wrap{width:calc(100% - 22px)}header{align-items:flex-start}.nav{gap:9px}.nav a{font-size:10px}.members{grid-template-columns:repeat(2,1fr)}.tools{grid-template-columns:1fr}.guide-grid{grid-template-columns:1fr}.hero{border-radius:22px}.section-head{display:block}.section-head p{margin-top:7px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+.community-panel{border:1px solid #6f648a;border-radius:22px;padding:clamp(20px,4vw,32px);background:linear-gradient(135deg,#302b49,#1d3542);box-shadow:0 18px 55px #0003}
+.community-top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap}
+.community-copy{max-width:620px}.community-copy h2{font-size:clamp(22px,4vw,30px);margin:9px 0 8px;letter-spacing:-.04em}.community-copy p{color:#d2d4e5;font-size:12px;line-height:1.9;margin:0}
+.community-stats{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:9px;min-width:min(100%,290px)}
+.community-stat{padding:14px;border:1px solid #ffffff25;border-radius:14px;background:#ffffff0b}.community-stat small{display:block;color:#c3c6d9;font-size:10px}.community-stat strong{display:block;font-size:clamp(25px,4vw,34px);line-height:1.3;color:var(--gold);font-variant-numeric:tabular-nums}
+.community-action{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}.community-action button{border:0;border-radius:13px;background:var(--gold);color:#2b2334;padding:14px 20px;font-size:13px;font-weight:1000;box-shadow:0 7px 22px #0003}.community-action button:hover{filter:brightness(1.08);transform:translateY(-1px)}.community-action button:disabled{opacity:.65;cursor:wait;transform:none}
+.community-footnote{font-size:10px;color:#c0c4d7;line-height:1.8;max-width:740px}.community-status{font-size:11px;color:var(--mint);min-height:1.4em}.admin-link{color:#aab2cc;text-decoration:none;font-size:10px}.admin-link:hover{color:var(--gold)}
+@media(max-width:620px){.community-stats{width:100%;min-width:0}.community-stat{padding:12px}.community-action{align-items:stretch}.community-action button{width:100%}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="brand">DOZLE FAN BASE<small>UNOFFICIAL FAN PROJECT</small></div><nav class="nav"><a href="#members">メンバー</a><a href="#fan-tools">応援ツール</a><a href="#watch">推し活メモ</a><a href="#official">公式リンク</a></nav></header>
+<header><div class="brand">DOZLE FAN BASE<small>UNOFFICIAL FAN PROJECT</small></div><nav class="nav"><a href="#members">メンバー</a><a href="#community">みんなで応援</a><a href="#fan-tools">応援ツール</a><a href="#watch">推し活メモ</a><a href="#official">公式リンク</a></nav></header>
 <main>
 <section class="hero">
 <div class="hero-inner"><div class="eyebrow">WELCOME, FANS!</div><h1>好きの気持ちを、<br><span>ここに集めよう。</span></h1>
@@ -34,6 +44,21 @@ section{margin:48px 0}.section-head{display:flex;justify-content:space-between;a
 <div class="hero-actions"><a class="btn primary" href="#members">メンバーを見に行く ↓</a><a class="btn" href="#fan-tools">応援メッセージを作る ✦</a></div>
 <div class="pill-row"><span class="pill">🎮 GAME & CREATIVITY</span><span class="pill">💛 FAN COMMUNITY</span><span class="pill">✨ MADE WITH RESPECT</span></div></div>
 </section>
+
+<section id="community"><div class="community-panel">
+  <div class="community-top">
+    <div class="community-copy"><div class="kicker">ONE BIG CHEER</div><h2>ドズル社へ、みんなの応援を！ 💛</h2>
+      <p>ここはファンのみんなが応援の気持ちを積み上げる、非公式サイト内のカウンター。メンバー別の数ではなく、ドズル社全体への応援をひとつに集めよう！</p>
+    </div>
+    <div class="community-stats" aria-live="polite">
+      <div class="community-stat"><small>みんなの応援</small><strong id="cheerCount">—</strong></div>
+      <div class="community-stat"><small>サイトアクセス</small><strong id="viewCount">—</strong></div>
+    </div>
+  </div>
+  <div class="community-action"><button type="button" id="cheerButton">💛 ドズル社を応援する！</button>
+    <span class="community-status" id="communityStatus" role="status">応援の気持ちは何度でも送れるで！</span></div>
+  <p class="community-footnote">※このボタンはこの非公式サイト内の応援カウンターに記録されるだけで、ドズル社やメンバーに通知されたり、公式の応援数・評価・ランキングに反映されたりするものではありません。アクセス数は同じタブのセッションにつき1回で、再読み込みだけでは増えません。</p>
+</div></section>
 <section id="members"><div class="section-head"><div><div class="kicker">THE CREW</div><h2>ドズル社メンバー</h2><p>公式プロフィールをもとに、5人を紹介！</p></div></div>
 <div class="members">
 <article class="member" style="--accent:#e66b73"><div class="symbol">🦍</div><h3>ドズル</h3><div class="role">LEADER / RED</div><p>ドズル社のリーダー。ゲーム実況を中心に、楽しいエンターテインメントを届ける。</p><a href="https://www.dozle.jp/members/dozle/" target="_blank" rel="noopener">公式プロフィール ↗</a></article>
@@ -58,11 +83,41 @@ section{margin:48px 0}.section-head{display:flex;justify-content:space-between;a
 <section id="official"><div class="section-head"><div><div class="kicker">OFFICIAL LINKS</div><h2>公式情報はこちら</h2><p>最新情報・動画・グッズは公式サイトでチェック！</p></div></div>
 <div class="official"><a href="https://www.dozle.jp/" target="_blank" rel="noopener">🌐 ドズル社 公式サイト ↗</a><a href="https://www.dozle.jp/members/" target="_blank" rel="noopener">👥 メンバー一覧 ↗</a><a href="https://www.dozle.jp/support_rule/" target="_blank" rel="noopener">📘 公式応援ガイドライン ↗</a><a href="https://www.youtube.com/@dozle" target="_blank" rel="noopener">▶ 公式YouTube ↗</a><a href="https://x.com/dozle_official" target="_blank" rel="noopener">𝕏 公式X ↗</a><a href="https://dozle-store.jp/" target="_blank" rel="noopener">🛍️ 公式ストア ↗</a></div>
 </section>
-<div class="note"><strong>このサイトについて：</strong>本サイトはファンが制作した非公式の応援サイトであり、株式会社ドズルおよびドズル社の公式サイトではありません。公式ロゴ・公式画像・動画素材は使用していません。メンバー名等は紹介目的で記載しています。掲載情報は変更される場合があります。最新・正確な情報は必ず公式サイトをご確認ください。</div>
+<div class="note"><strong>このサイトについて：</strong>本サイトはファンが制作した非公式の応援サイトであり、株式会社ドズルおよびドズル社の公式サイトではありません。公式ロゴ・公式画像・動画素材は使用していません。応援ボタンは本サイト内のカウンターに記録する機能で、公式への通知や公式数値への反映はありません。メンバー名等は紹介目的で記載しています。掲載情報は変更される場合があります。最新・正確な情報は必ず公式サイトをご確認ください。</div>
 </main>
-<footer><span>DOZLE FAN BASE · Unofficial fan-made website</span><span><a href="https://www.dozle.jp/" target="_blank" rel="noopener">Official Dozle site</a> · <a href="/index.html">Andyの作品ポータル</a></span></footer>
+<footer><span>DOZLE FAN BASE · Unofficial fan-made website</span><span><a href="https://www.dozle.jp/" target="_blank" rel="noopener">Official Dozle site</a> · <a href="/index.html">Andyの作品ポータル</a> · <a class="admin-link" href="/apps/dozle-fan/admin.html">管理者ログイン</a></span></footer>
 </div><div class="toast" id="toast" role="status">コピーしたで！</div>
 <script>
+
+async function sendCommunityEvent(action){
+  const response=await fetch("/api/dozle",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action})});
+  const result=await response.json();
+  if(!response.ok||!result.ok)throw new Error(result.error||"記録できませんでした");
+  renderCommunityStats(result.stats);return result.stats;
+}
+function renderCommunityStats(stats){
+  if(!stats)return;
+  document.getElementById("cheerCount").textContent=Number(stats.totalCheers||0).toLocaleString("ja-JP");
+  document.getElementById("viewCount").textContent=Number(stats.totalViews||0).toLocaleString("ja-JP");
+}
+async function loadCommunityStats(){
+  try{const response=await fetch("/api/dozle",{cache:"no-store"});const result=await response.json();if(response.ok&&result.ok)renderCommunityStats(result.stats)}
+  catch(error){document.getElementById("communityStatus").textContent="集計の読み込みに失敗しました。"}
+}
+const cheerButton=document.getElementById("cheerButton");
+cheerButton.addEventListener("click",async()=>{
+  if(cheerButton.disabled)return;
+  cheerButton.disabled=true;cheerButton.textContent="応援を送信中…";
+  document.getElementById("communityStatus").textContent="応援を記録してるで！";
+  try{await sendCommunityEvent("cheer");document.getElementById("communityStatus").textContent="応援ありがとう！みんなのカウンターに反映されたで！ 💛";showToast("応援を記録したで！")}
+  catch(error){document.getElementById("communityStatus").textContent=error.message||"送信できませんでした。もう一度試してね。"}
+  finally{cheerButton.disabled=false;cheerButton.textContent="💛 ドズル社を応援する！"}
+});
+const viewSessionKey="dozle-fan-view-session-v1";let alreadyCounted=false;
+try{alreadyCounted=sessionStorage.getItem(viewSessionKey)==="1"}catch(error){}
+if(alreadyCounted){loadCommunityStats()}
+else{sendCommunityEvent("view").then(()=>{try{sessionStorage.setItem(viewSessionKey,"1")}catch(error){}}).catch(()=>loadCommunityStats())}
+
 const lines={
 "ドズル":["いつも楽しい企画と動画をありがとうございます！これからも応援しています！","ドズルさんの挑戦する姿に元気をもらっています！これからも楽しみにしています！","これからもドズル社らしい楽しい動画を待っています！"],
 "ぼんじゅうる":["ぼんじゅうるさんのトークが大好きです！いつも笑顔をありがとうございます！","動画での活躍、いつも楽しみにしています！これからも応援しています！","ぼんさんの魅力がもっとたくさんの人に届きますように！"],
