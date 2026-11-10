@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10121f">
+<meta name="description" content="ドズル社を応援する非公式ファンサイト。メンバー紹介、推し活メモ、応援メッセージメーカー。">
+<title>DOZLE FAN BASE｜ドズル社応援基地</title>
+<style>
+:root{color-scheme:dark;--bg:#10121f;--panel:#191d30;--panel2:#202640;--line:#343b58;--text:#f6f4ff;--muted:#b0b4ca;--gold:#f4d58b;--mint:#a7eadc;--red:#e66b73}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#51416b55,transparent 34%),radial-gradient(ellipse at 92% 22%,#285b6650,transparent 30%),var(--bg);color:var(--text);font-family:Inter,"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif}a{color:inherit}button{font:inherit;cursor:pointer}.wrap{width:min(1120px,calc(100% - 32px));margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 0;gap:16px}.brand{font-weight:1000;letter-spacing:.13em;font-size:13px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.24em;margin-top:4px}.nav{display:flex;gap:16px;flex-wrap:wrap}.nav a{font-size:11px;color:var(--muted);text-decoration:none}.nav a:hover{color:var(--gold)}
+.hero{position:relative;overflow:hidden;border:1px solid #5b5474;border-radius:30px;padding:clamp(28px,6vw,66px);background:linear-gradient(125deg,#332d4c 0%,#242c45 55%,#21424b 100%);box-shadow:0 25px 80px #0005}.hero:after{content:"✦";position:absolute;right:7%;top:4%;font-size:clamp(100px,22vw,240px);color:#ffffff0b;transform:rotate(15deg)}.hero-inner{position:relative;z-index:1;max-width:730px}.eyebrow{font-size:10px;font-weight:900;letter-spacing:.25em;color:var(--gold)}h1{font-size:clamp(38px,7vw,76px);line-height:1.02;letter-spacing:-.07em;margin:17px 0}.hero h1 span{color:var(--gold)}.hero p{max-width:600px;color:#d8d8e8;line-height:1.9;font-size:14px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.btn{border:1px solid #ffffff42;border-radius:12px;padding:12px 17px;background:#ffffff12;color:var(--text);font-size:11px;font-weight:900;text-decoration:none}.btn.primary{background:var(--gold);border-color:var(--gold);color:#292235}.btn:hover{filter:brightness(1.1)}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.pill{border:1px solid #ffffff2a;border-radius:999px;padding:7px 11px;color:#e5e3f0;font-size:10px;background:#ffffff0b}
+section{margin:48px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:17px}.section-head h2{font-size:24px;letter-spacing:-.04em;margin:0}.section-head p{font-size:11px;color:var(--muted);margin:5px 0 0}.kicker{font-size:9px;color:var(--gold);font-weight:900;letter-spacing:.2em}
+.members{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.member{--accent:#d7d7d7;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,#222941,#171b2d);padding:17px 14px;min-height:210px;display:flex;flex-direction:column}.member:before{content:"";position:absolute;right:-35px;top:-43px;width:120px;height:120px;border-radius:50%;background:var(--accent);opacity:.13}.member .symbol{font-size:36px;position:relative}.member h3{font-size:16px;margin:12px 0 4px}.member .role{font-size:10px;color:var(--accent);font-weight:900;letter-spacing:.05em}.member p{font-size:10px;line-height:1.7;color:var(--muted);margin:10px 0 13px}.member a{font-size:10px;color:#dce8ff;margin-top:auto;text-decoration:none}.member a:hover{text-decoration:underline}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#20263b,#171b2c);padding:22px}.panel h3{font-size:17px;margin:0 0 8px}.panel>p{font-size:11px;line-height:1.8;color:var(--muted);margin:0 0 16px}.select-row{display:flex;gap:8px;flex-wrap:wrap}.select-row button{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#111729;color:#d8d9e8;font-size:11px}.select-row button.active{background:var(--gold);border-color:var(--gold);color:#282235;font-weight:900}.message{min-height:88px;border:1px dashed #77708f;border-radius:13px;padding:15px;margin:14px 0;color:#f4e8c8;font-size:14px;line-height:1.8}.panel-actions{display:flex;gap:8px;flex-wrap:wrap}.panel-actions button{border:0;border-radius:10px;background:var(--mint);color:#142b2c;padding:10px 14px;font-size:11px;font-weight:900}.panel-actions button.secondary{background:#303954;color:#e9e9f5;border:1px solid #4a5270}
+.checklist{display:grid;gap:10px}.check{display:flex;gap:10px;align-items:center;color:#d8d9e8;font-size:12px}.check input{accent-color:#a7eadc;width:16px;height:16px}.progress{height:8px;background:#0f1423;border-radius:99px;overflow:hidden;margin:16px 0 8px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#a7eadc,#f4d58b);transition:width .2s}.progress-label{font-size:10px;color:var(--muted)}
+.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.guide{border:1px solid var(--line);border-radius:17px;padding:18px;background:#1a2033}.guide .num{font-size:10px;color:var(--gold);font-weight:900;letter-spacing:.15em}.guide h3{font-size:14px;margin:10px 0 6px}.guide p{font-size:11px;color:var(--muted);line-height:1.8;margin:0}
+.official{display:flex;gap:10px;flex-wrap:wrap}.official a{border:1px solid #4a5270;background:#222941;border-radius:12px;padding:12px 15px;text-decoration:none;font-size:11px;font-weight:800}.official a:hover{border-color:var(--gold)}
+.note{border:1px solid #5b5474;background:#ffffff08;border-radius:15px;padding:15px 17px;color:#c8c8d8;font-size:10px;line-height:1.9}footer{padding:28px 0 42px;border-top:1px solid #ffffff18;color:#888fa9;font-size:10px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}footer a{color:#c6cce0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#f4d58b;color:#282235;border-radius:999px;padding:11px 17px;font-size:11px;font-weight:900;transition:.2s;z-index:5}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:850px){.members{grid-template-columns:repeat(3,1fr)}}@media(max-width:620px){.wrap{width:calc(100% - 22px)}header{align-items:flex-start}.nav{gap:9px}.nav a{font-size:10px}.members{grid-template-columns:repeat(2,1fr)}.tools{grid-template-columns:1fr}.guide-grid{grid-template-columns:1fr}.hero{border-radius:22px}.section-head{display:block}.section-head p{margin-top:7px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="brand">DOZLE FAN BASE<small>UNOFFICIAL FAN PROJECT</small></div><nav class="nav"><a href="#members">メンバー</a><a href="#fan-tools">応援ツール</a><a href="#watch">推し活メモ</a><a href="#official">公式リンク</a></nav></header>
+<main>
+<section class="hero">
+<div class="hero-inner"><div class="eyebrow">WELCOME, FANS!</div><h1>好きの気持ちを、<br><span>ここに集めよう。</span></h1>
+<p>ドズル社が好きな人のための、非公式ファン応援基地！メンバーのことをもっと知ったり、応援メッセージを作ったり、今日の推し活を記録したり。自分のペースで楽しもう！</p>
+<div class="hero-actions"><a class="btn primary" href="#members">メンバーを見に行く ↓</a><a class="btn" href="#fan-tools">応援メッセージを作る ✦</a></div>
+<div class="pill-row"><span class="pill">🎮 GAME & CREATIVITY</span><span class="pill">💛 FAN COMMUNITY</span><span class="pill">✨ MADE WITH RESPECT</span></div></div>
+</section>
+<section id="members"><div class="section-head"><div><div class="kicker">THE CREW</div><h2>ドズル社メンバー</h2><p>公式プロフィールをもとに、5人を紹介！</p></div></div>
+<div class="members">
+<article class="member" style="--accent:#e66b73"><div class="symbol">🦍</div><h3>ドズル</h3><div class="role">LEADER / RED</div><p>ドズル社のリーダー。ゲーム実況を中心に、楽しいエンターテインメントを届ける。</p><a href="https://www.dozle.jp/members/dozle/" target="_blank" rel="noopener">公式プロフィール ↗</a></article>
+<article class="member" style="--accent:#b99be9"><div class="symbol">🍆</div><h3>ぼんじゅうる</h3><div class="role">PURPLE</div><p>独特の存在感とトークで、動画に楽しい空気をプラス！</p><a href="https://www.dozle.jp/members/bonjour/" target="_blank" rel="noopener">公式プロフィール ↗</a></article>
+<article class="member" style="--accent:#f4d45e"><div class="symbol">🍌</div><h3>おんりー</h3><div class="role">YELLOW</div><p>ゲームスキルが光る、スピードスター。プレイにも注目！</p><a href="https://www.dozle.jp/members/qnly/" target="_blank" rel="noopener">公式プロフィール ↗</a></article>
+<article class="member" style="--accent:#54c3f1"><div class="symbol">☃️</div><h3>おらふくん</h3><div class="role">SKY BLUE</div><p>マインクラフトやシューティングゲームが得意。見て元気になる動画を発信！</p><a href="https://www.dozle.jp/members/oraf-kun/" target="_blank" rel="noopener">公式プロフィール ↗</a></article>
+<article class="member" style="--accent:#eb6d9a"><div class="symbol">🐷</div><h3>おおはらMEN</h3><div class="role">PINK</div><p>マイクラ中心のゲーム実況者。ゆるやかなトークも魅力！</p><a href="https://www.dozle.jp/members/ooharamen/" target="_blank" rel="noopener">公式プロフィール ↗</a></article>
+</div></section>
+<section id="fan-tools"><div class="section-head"><div><div class="kicker">FAN TOOLKIT</div><h2>応援ツール</h2><p>ちょっとした遊びも、応援のきっかけに。</p></div></div>
+<div class="tools">
+<div class="panel"><h3>✦ 応援メッセージメーカー</h3><p>メンバーを選んで、応援メッセージを作ってみよう！投稿する前に、自分の言葉にアレンジしてね。</p>
+<div class="select-row" id="memberSelect"><button class="active" data-name="ドズル">ドズル</button><button data-name="ぼんじゅうる">ぼんじゅうる</button><button data-name="おんりー">おんりー</button><button data-name="おらふくん">おらふくん</button><button data-name="おおはらMEN">おおはらMEN</button></div>
+<div class="message" id="message" aria-live="polite">ドズルさん、いつも楽しい動画をありがとうございます！これからも応援しています！</div>
+<div class="panel-actions"><button id="generate">別のメッセージを作る</button><button class="secondary" id="copy">コピーする</button></div>
+</div>
+<div class="panel" id="watch"><h3>☑ 今日の推し活メモ</h3><p>できたことにチェック！記録はこのブラウザ内だけに保存されるよ。</p>
+<div class="checklist"><label class="check"><input type="checkbox" data-task="video"> お気に入りの動画を楽しんだ</label><label class="check"><input type="checkbox" data-task="comment"> 感想や応援の言葉を考えた</label><label class="check"><input type="checkbox" data-task="share"> 好きなシーンを思い出した</label><label class="check"><input type="checkbox" data-task="rest"> 休憩もちゃんと取った</label></div>
+<div class="progress"><span id="progressBar"></span></div><div class="progress-label" id="progressLabel">0 / 4 完了</div>
+</div></div></section>
+<section><div class="section-head"><div><div class="kicker">FAN GUIDE</div><h2>応援をもっと楽しく</h2><p>みんなが気持ちよく楽しめるファン活動にしよう。</p></div></div>
+<div class="guide-grid"><article class="guide"><div class="num">01 / WATCH</div><h3>動画を楽しむ</h3><p>気になった動画やシリーズを見て、お気に入りの瞬間を見つけよう。</p></article><article class="guide"><div class="num">02 / RESPECT</div><h3>思いやりを忘れずに</h3><p>メンバーやほかのファンへの敬意を大切に。ネタバレやコメントにも気配りを。</p></article><article class="guide"><div class="num">03 / CREATE</div><h3>自分らしく応援する</h3><p>感想、イラスト、考察など、自分が楽しいと思える方法で応援しよう。</p></article></div></section>
+<section id="official"><div class="section-head"><div><div class="kicker">OFFICIAL LINKS</div><h2>公式情報はこちら</h2><p>最新情報・動画・グッズは公式サイトでチェック！</p></div></div>
+<div class="official"><a href="https://www.dozle.jp/" target="_blank" rel="noopener">🌐 ドズル社 公式サイト ↗</a><a href="https://www.dozle.jp/members/" target="_blank" rel="noopener">👥 メンバー一覧 ↗</a><a href="https://www.youtube.com/@dozle" target="_blank" rel="noopener">▶ 公式YouTube ↗</a><a href="https://x.com/dozle_official" target="_blank" rel="noopener">𝕏 公式X ↗</a><a href="https://dozle-store.jp/" target="_blank" rel="noopener">🛍️ 公式ストア ↗</a></div>
+</section>
+<div class="note"><strong>このサイトについて：</strong>本サイトはファンが制作した非公式の応援サイトであり、株式会社ドズルおよびドズル社の公式サイトではありません。公式ロゴ・公式画像・動画素材は使用していません。メンバー名等は紹介目的で記載しています。掲載情報は変更される場合があります。最新・正確な情報は必ず公式サイトをご確認ください。</div>
+</main>
+<footer><span>DOZLE FAN BASE · Unofficial fan-made website</span><span><a href="https://www.dozle.jp/" target="_blank" rel="noopener">Official Dozle site</a> · <a href="/index.html">Andyの作品ポータル</a></span></footer>
+</div><div class="toast" id="toast" role="status">コピーしたで！</div>
+<script>
+const lines={
+"ドズル":["いつも楽しい企画と動画をありがとうございます！これからも応援しています！","ドズルさんの挑戦する姿に元気をもらっています！これからも楽しみにしています！","これからもドズル社らしい楽しい動画を待っています！"],
+"ぼんじゅうる":["ぼんじゅうるさんのトークが大好きです！いつも笑顔をありがとうございます！","動画での活躍、いつも楽しみにしています！これからも応援しています！","ぼんさんの魅力がもっとたくさんの人に届きますように！"],
+"おんりー":["おんりーさんのプレイが本当にかっこいいです！いつも応援しています！","すごいプレイと楽しい動画をありがとうございます！これからも楽しみです！","おんりーさんの挑戦をこれからも応援しています！"],
+"おらふくん":["おらふくんの動画を見ると元気が出ます！いつもありがとうございます！","楽しい動画を届けてくれてありがとう！これからも応援しています！","おらふくんの活躍をいつも楽しみにしています！"],
+"おおはらMEN":["おおはらMENさんの建築やトークが大好きです！応援しています！","いつも楽しい動画をありがとうございます！これからも楽しみにしています！","おおはらMENさんらしい動画が大好きです！これからも応援しています！"]
+};
+let selected="ドズル";let previous=-1;
+const message=document.getElementById("message");
+document.querySelectorAll("#memberSelect button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#memberSelect button").forEach(x=>x.classList.remove("active"));b.classList.add("active");selected=b.dataset.name;previous=-1;makeMessage()}));
+function makeMessage(){const arr=lines[selected];let n=Math.floor(Math.random()*arr.length);if(arr.length>1&&n===previous)n=(n+1)%arr.length;previous=n;message.textContent=selected+"さん、"+arr[n].replace(/^(いつも|これからも|動画での活躍|楽しい動画を|すごいプレイと楽しい動画を|おらふくんの動画を見ると|おらふくんの活躍を|おおはらMENさんの建築やトークが|おおはらMENさんらしい動画が|ぼんじゅうるさんのトークが|ぼんさんの魅力が|ドズルさんの挑戦する姿に|ドズルさんの挑戦を)/,"");}
+document.getElementById("generate").addEventListener("click",makeMessage);
+document.getElementById("copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(message.textContent);showToast("コピーしたで！")}catch(e){showToast("コピーできない場合は文章を選択してね")}}); 
+function showToast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1800)}
+const checks=[...document.querySelectorAll("[data-task]")];const today=new Date().toLocaleDateString("ja-JP");const key="dozle-fan-check-"+today;
+try{const saved=JSON.parse(localStorage.getItem(key)||"{}");checks.forEach(c=>c.checked=!!saved[c.dataset.task])}catch(e){}
+function updateProgress(){let done=checks.filter(c=>c.checked).length;document.getElementById("progressBar").style.width=(done/checks.length*100)+"%";document.getElementById("progressLabel").textContent=done+" / "+checks.length+" 完了";let state={};checks.forEach(c=>state[c.dataset.task]=c.checked);try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}}
+checks.forEach(c=>c.addEventListener("change",updateProgress));updateProgress();
+</script>
+</body></html>
