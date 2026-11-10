@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10121f">
+<meta name="robots" content="noindex,nofollow">
+<title>管理者ページ｜DOZLE FAN BASE</title>
+<style>
+:root{color-scheme:dark;--bg:#10121f;--panel:#1b2034;--line:#343b58;--text:#f6f4ff;--muted:#b0b4ca;--gold:#f4d58b;--mint:#a7eadc}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#51416b55,transparent 34%),var(--bg);color:var(--text);font-family:Inter,"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif}
+.wrap{width:min(1050px,calc(100% - 28px));margin:30px auto 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}.brand{font-weight:1000;letter-spacing:.12em;font-size:12px}.brand small{display:block;color:var(--muted);font-size:9px;margin-top:4px;letter-spacing:.2em}.link{color:var(--gold);text-decoration:none;font-size:11px}
+.card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#20263b,#171b2c);padding:22px;margin-bottom:16px}.login{max-width:440px;margin:9vh auto 0}.login h1{font-size:24px;margin:0 0 8px}.muted{color:var(--muted);font-size:12px;line-height:1.8}.field{display:grid;gap:7px;margin:18px 0 12px}.field label{font-size:11px;color:var(--muted)}input{width:100%;padding:13px;border-radius:10px;border:1px solid var(--line);background:#111729;color:var(--text);font:inherit;outline:none}input:focus{border-color:var(--gold)}
+button{border:0;border-radius:10px;padding:12px 16px;background:var(--gold);color:#282235;font-weight:900;cursor:pointer;font:inherit}button:disabled{opacity:.6;cursor:wait}.secondary{background:#303954;color:#f1f0fa;border:1px solid #4a5270}.error{min-height:1.4em;color:#ff9a9f;font-size:11px}
+.hidden{display:none!important}.dashboard h1{font-size:28px;margin:0 0 6px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}.metric{border:1px solid var(--line);border-radius:16px;padding:17px;background:#1b2034}.metric small{font-size:10px;color:var(--muted)}.metric strong{display:block;font-size:clamp(23px,4vw,34px);font-variant-numeric:tabular-nums;margin-top:5px;color:var(--gold)}
+.section-title{font-size:16px;margin:0 0 5px}.chart-scroll{overflow-x:auto;padding-bottom:8px}.chart{display:flex;align-items:end;gap:7px;min-width:760px;height:220px;padding:18px 4px 0;border-bottom:1px solid var(--line)}.bar-item{flex:1;min-width:16px;display:grid;grid-template-rows:1fr auto;gap:8px;height:100%;align-items:end}.bars{height:100%;display:flex;align-items:end;justify-content:center;gap:2px}.bar{width:45%;min-height:2px;border-radius:4px 4px 0 0}.bar.views{background:#70a9d8}.bar.cheers{background:#d8b96e}.date{font-size:9px;color:var(--muted);white-space:nowrap;text-align:center;transform:rotate(-35deg);transform-origin:top center}
+.legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:10px;margin-top:15px}.dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}.views-dot{background:#70a9d8}.cheers-dot{background:#d8b96e}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:11px;min-width:430px}th,td{padding:10px 9px;border-bottom:1px solid #ffffff13;text-align:left}th{color:var(--muted);font-weight:700}td.num{text-align:right;font-variant-numeric:tabular-nums}.events{display:grid;gap:8px}.event{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:10px;background:#ffffff07;font-size:11px}.event time{color:var(--muted);white-space:nowrap}
+.notice{font-size:10px;color:var(--muted);line-height:1.8;margin-top:20px}
+@media(max-width:750px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.top{align-items:flex-start}.dashboard h1{font-size:23px}}
+@media(max-width:430px){.metrics{gap:8px}.metric{padding:13px}.card{padding:16px}.event{display:grid;gap:4px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand">DOZLE FAN BASE<small>ADMIN CONSOLE · PRIVATE</small></div><a class="link" href="/apps/dozle-fan/index.html">← 応援基地へ戻る</a></header>
+<section class="card login" id="loginPanel">
+  <div class="kicker" style="font-size:9px;color:var(--gold);letter-spacing:.2em;font-weight:900">ADMINISTRATOR ONLY</div>
+  <h1>管理者ログイン</h1>
+  <p class="muted">このページはサイト管理者向けです。管理用パスワードを入力してください。</p>
+  <form id="loginForm">
+    <div class="field"><label for="password">管理用パスワード</label><input id="password" type="password" autocomplete="current-password" required></div>
+    <button id="loginButton" type="submit">ログイン</button>
+    <p class="error" id="loginError" role="status"></p>
+  </form>
+</section>
+<main class="dashboard hidden" id="dashboard">
+  <div class="top">
+    <div><h1>サイト管理ダッシュボード</h1><p class="muted">DOZLE FAN BASE · 集計データ</p></div>
+    <div style="display:flex;gap:8px"><button class="secondary" id="refreshButton">更新</button><button class="secondary" id="logoutButton">ログアウト</button></div>
+  </div>
+  <div class="metrics">
+    <div class="metric"><small>累計アクセス</small><strong id="totalViews">—</strong></div>
+    <div class="metric"><small>累計応援</small><strong id="totalCheers">—</strong></div>
+    <div class="metric"><small>今日のアクセス</small><strong id="todayViews">—</strong></div>
+    <div class="metric"><small>今日の応援</small><strong id="todayCheers">—</strong></div>
+  </div>
+  <section class="card">
+    <h2 class="section-title">直近30日間の推移</h2>
+    <p class="muted">青：アクセス（タブごとのセッション）／金：応援ボタン</p>
+    <div class="chart-scroll"><div class="chart" id="chart"></div></div>
+    <div class="legend"><span><i class="dot views-dot"></i>アクセス</span><span><i class="dot cheers-dot"></i>応援</span></div>
+  </section>
+  <section class="card">
+    <h2 class="section-title">日別データ</h2>
+    <p class="muted">直近30日分。数字は全訪問者で共有されています。</p>
+    <div class="table-wrap"><table><thead><tr><th>日付</th><th style="text-align:right">アクセス</th><th style="text-align:right">応援</th></tr></thead><tbody id="dailyRows"></tbody></table></div>
+  </section>
+  <section class="card">
+    <h2 class="section-title">最近のアクティビティ</h2>
+    <p class="muted">個人を特定する情報は記録していません。</p>
+    <div class="events" id="recentEvents"></div>
+  </section>
+  <p class="notice" id="dataNote">データを読み込んでいます。</p>
+</main>
+</div>
+<script>
+const loginPanel=document.getElementById("loginPanel");
+const dashboard=document.getElementById("dashboard");
+const loginError=document.getElementById("loginError");
+const fmt=value=>Number(value||0).toLocaleString("ja-JP");
+async function loadStats(){
+  const response=await fetch("/api/dozle-admin?action=stats",{cache:"no-store",credentials:"same-origin"});
+  const result=await response.json();
+  if(response.status===401){showLogin("セッションが切れました。もう一度ログインしてください。");return}
+  if(!response.ok||!result.ok)throw new Error(result.error||"集計を読み込めませんでした");
+  const s=result.stats;
+  document.getElementById("totalViews").textContent=fmt(s.totalViews);
+  document.getElementById("totalCheers").textContent=fmt(s.totalCheers);
+  document.getElementById("todayViews").textContent=fmt(s.todayViews);
+  document.getElementById("todayCheers").textContent=fmt(s.todayCheers);
+  const max=Math.max(1,...s.daily.map(d=>Math.max(d.views,d.cheers)));
+  document.getElementById("chart").innerHTML=s.daily.map(d=>{
+    const vh=Math.max(d.views?2:0,d.views/max*100);
+    const ch=Math.max(d.cheers?2:0,d.cheers/max*100);
+    return '<div class="bar-item" title="'+d.date+' · アクセス '+d.views+' · 応援 '+d.cheers+'"><div class="bars"><span class="bar views" style="height:'+vh+'%"></span><span class="bar cheers" style="height:'+ch+'%"></span></div><span class="date">'+d.date.slice(5)+'</span></div>';
+  }).join("");
+  document.getElementById("dailyRows").innerHTML=[...s.daily].reverse().map(d=>'<tr><td>'+d.date+'</td><td class="num">'+fmt(d.views)+'</td><td class="num">'+fmt(d.cheers)+'</td></tr>').join("");
+  const label={view:"サイトアクセス",cheer:"ドズル社への応援"};
+  document.getElementById("recentEvents").innerHTML=s.recent.length?s.recent.map(e=>'<div class="event"><span>'+(label[e.type]||"アクティビティ")+'</span><time>'+new Date(e.at).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})+'</time></div>').join(""):'<p class="muted">まだ記録はありません。最初の応援を待ってるで！</p>';
+  document.getElementById("dataNote").textContent=s.note+" 最終取得："+new Date(s.updatedAt).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"});
+  loginPanel.classList.add("hidden");dashboard.classList.remove("hidden");
+}
+function showLogin(message=""){
+  dashboard.classList.add("hidden");loginPanel.classList.remove("hidden");loginError.textContent=message;
+}
+document.getElementById("loginForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  const button=document.getElementById("loginButton");
+  button.disabled=true;loginError.textContent="ログイン中…";
+  try{
+    const response=await fetch("/api/dozle-admin?action=login",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"same-origin",body:JSON.stringify({password:document.getElementById("password").value})});
+    const result=await response.json();
+    if(!response.ok||!result.ok)throw new Error(result.error||"ログインできませんでした");
+    document.getElementById("password").value="";
+    await loadStats();
+  }catch(error){loginError.textContent=error.message}
+  finally{button.disabled=false}
+});
+document.getElementById("refreshButton").addEventListener("click",async()=>{
+  const button=document.getElementById("refreshButton");button.disabled=true;
+  try{await loadStats()}catch(error){document.getElementById("dataNote").textContent=error.message}
+  finally{button.disabled=false}
+});
+document.getElementById("logoutButton").addEventListener("click",async()=>{
+  try{await fetch("/api/dozle-admin?action=logout",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"same-origin",body:"{}"})}catch(error){}
+  showLogin("ログアウトしました。");
+});
+loadStats().then(()=>{}).catch(()=>showLogin());
+</script>
+</body>
+</html>
