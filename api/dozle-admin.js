@@ -72,7 +72,7 @@ function passwordMatches(password) {
 }
 
 export default async function handler(req, res) {
-  const action = String(req.query?.action || "");
+  const requestUrl = new URL(req.url || "/", `https://${req.headers.host || "localhost"}`);\n  const action = requestUrl.searchParams.get("action") || "";
 
   if (req.method === "POST" && !isSameOrigin(req)) {
     return send(res, 403, { ok: false, error: "同じサイトからのみ操作できます。" });
