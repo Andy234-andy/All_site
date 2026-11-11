@@ -120,7 +120,7 @@ cheerButton.addEventListener("click",async()=>{
 const viewSessionKey="dozle-fan-view-session-v1";let alreadyCounted=false;
 try{alreadyCounted=sessionStorage.getItem(viewSessionKey)==="1"}catch(error){}
 if(alreadyCounted){loadCommunityStats()}
-else{sendCommunityEvent("view").then(()=>{try{sessionStorage.setItem(viewSessionKey,"1")}catch(error){}}).catch(()=>loadCommunityStats())}
+else{loadCommunityStats();sendCommunityEvent("view").then(()=>{try{sessionStorage.setItem(viewSessionKey,"1")}catch(error){}loadCommunityStats()}).catch(()=>loadCommunityStats())}
 setInterval(()=>{if(!document.hidden)loadCommunityStats()},15000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadCommunityStats()});
 
