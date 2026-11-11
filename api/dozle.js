@@ -64,7 +64,7 @@ export default async function handler(req, res) {
     const status = Number.isInteger(error?.statusCode) ? error.statusCode : 500;
     return send(res, status, {
       ok: false,
-      error: status === 503 ? "応援が集中しています。少ししてからもう一度押してね。" : "記録に失敗しました。通信を確認してね。",
+      error: status === 503 ? "保存サーバーが一時的に応答できません。少ししてからもう一度押してね。" : "記録に失敗しました。通信を確認してね。",
     });
   }
 }
