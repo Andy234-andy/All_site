@@ -108,9 +108,13 @@ const cheerButton=document.getElementById("cheerButton");
 cheerButton.addEventListener("click",async()=>{
   if(cheerButton.disabled)return;
   cheerButton.disabled=true;cheerButton.textContent="応援を送信中…";
+  const cheerCountEl=document.getElementById("cheerCount");
+  const previousCount=Number(String(cheerCountEl.textContent).replace(/,/g,""));
+  const canOptimisticallyUpdate=Number.isFinite(previousCount);
+  if(canOptimisticallyUpdate)cheerCountEl.textContent=(previousCount+1).toLocaleString("ja-JP");
   document.getElementById("communityStatus").textContent="応援を記録してるで！";
   try{await sendCommunityEvent("cheer");document.getElementById("communityStatus").textContent="応援ありがとう！みんなのカウンターに反映されたで！ 💛";showToast("応援を記録したで！")}
-  catch(error){document.getElementById("communityStatus").textContent=error.message||"送信できませんでした。もう一度試してね。"}
+  catch(error){if(canOptimisticallyUpdate)cheerCountEl.textContent=previousCount.toLocaleString("ja-JP");document.getElementById("communityStatus").textContent=error.message||"送信できませんでした。もう一度試してね。"}
   finally{cheerButton.disabled=false;cheerButton.textContent="💛 ドズル社を応援する！"}
 });
 const viewSessionKey="dozle-fan-view-session-v1";let alreadyCounted=false;
